@@ -1,0 +1,16 @@
+# fastapi
+fastapi>=0.68.0,<0.69.0
+pydantic>=1.8.0,<2.0.0
+uvicorn>=0.15.0,<0.16.0
+
+# database
+sqlalchemy
+sqlalchemy_utils
+pymongo
+
+# chat
+google-cloud-speech
+urllib3
+openai
+gtts
+playsound==1.2.2
