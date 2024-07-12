@@ -2,7 +2,7 @@ import pyaudio
 import wave
 import datetime
 import winsound
-
+import os
 
 
 class Recording():
@@ -36,14 +36,18 @@ class Recording():
 
             if (datetime.datetime.now() - last_sound_time).total_seconds() > self.no_sound_timeout:
                 break
-
+        #  끊을 수 있는지 확인 신호오면 (Check)
         self.beepsound()
 
         stream.stop_stream()
         stream.close()
         audio.terminate()
 
-        filename = "./data/recordingData/" + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".wav"
+        directory = "../data/recordingData/"
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        filename = directory + datetime.datetime.now().strftime("%Y%m%d_%H%M%S") + ".wav"
         wf = wave.open(filename, 'wb')
         wf.setnchannels(self.channels)
         wf.setsampwidth(audio.get_sample_size(self.format))

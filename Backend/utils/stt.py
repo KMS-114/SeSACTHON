@@ -15,7 +15,7 @@ from openai import OpenAI
 
 class ETRIstt:
     def __init__(self):
-        self.openApiURL = "http://aiopen.etri.re.kr:8088/WiseASR/Recognition"
+        self.openApiURL = "http://aiopen.etri.re.kr:8000/WiseASR/Recognition"
         self.accesskey = ""
 
     def stt(self, audio_file_path):
@@ -41,14 +41,12 @@ class ETRIstt:
         )
         return response
 
-    def run_stt(self, audio_file_path="./data/recordingData/womanEng.wav"):
+    def run_stt(self, audio_file_path="../data/recordingData/20240712_221523.wav"):
         response = self.stt(audio_file_path=audio_file_path)
-        kor_response = str(response.data, "utf-8")
-
-        start_point = kor_response.find('("recognized":"') + len('("recognized":"')
-        stt_result = kor_response[start_point:-3]
-
-        return stt_result
+        response_data = response.data.decode('utf-8')
+        response_parsed = json.loads(response_data)
+        answer = response_parsed.get('return_object',{}).get('recognized','')
+        return answer
 
 class OpenAIstt:
     def __init__(self):
@@ -94,4 +92,5 @@ class Googlestt:
 
 if __name__ == '__main__':
     etri_stt = ETRIstt()
-    answer = etri_stt.run_stt(audio_file_path="../16k.wav")
+    answer = etri_stt.run_stt(audio_file_path="../data/recordingData/20240712_221900.wav")
+    print(answer)
