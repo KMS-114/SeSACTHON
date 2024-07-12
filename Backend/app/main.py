@@ -27,7 +27,7 @@ def sqlite_connect():
     return {"message": str(get_rdb_session())}
 
 
-@app.get("/milvus_connect")
-def milvus_connect():
-    return {"message": get_mongo_database()}
+@app.get("/mongo_connect")
+def mongo_connect():
+    return {"message": str(get_mongo_database())}
 

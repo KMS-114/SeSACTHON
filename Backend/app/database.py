@@ -21,7 +21,7 @@ def get_rdb_session() -> Session:
 
 
 def get_mongo_database() -> MongoClient:
-    client = MongoClient("http://172.17.0.2:27017/")
+    client = MongoClient("mongodb://hackerton-mongo:27017/")
     db = client.get_database("hackerton")
     return db
 
