@@ -1,5 +1,5 @@
 import App from './App.svelte'
-import './styles/styles.css';
+// import './styles/styles.css';
 import './styles/navbar_styles.css';
 import './app.css'
 

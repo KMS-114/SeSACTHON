@@ -13,10 +13,10 @@
                     <a class="nav-link" href="/">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/jobpost">Job Posting</a>
+                    <a class="nav-link" on:click="{() => navigate('/jobpostlist')}">Job Posting</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/pricing">Profile</a>
+                    <a class="nav-link" href="/login">Profile</a>
                 </li>
             </ul>
             <div class="text-end">
@@ -29,7 +29,7 @@
 
 <style>
     .navbar {
-        margin-bottom: 20px; /* °£°İÀ» ÁÙÀÓ */
+        margin-bottom: 20px; /* ê°„ê²©ì„ ì¤„ì„ */
         position: fixed;
         width: 100%;
     }
@@ -39,14 +39,14 @@
         justify-content: space-between;
         width: 100%;
         padding-left: 0;
-        margin: 0 0px; /* °£°İÀ» ´õ ÀÛ°Ô Á¶Á¤ */
+        margin: 0 0px; /* ê°„ê²©ì„ ë” ì‘ê²Œ ì¡°ì • */
 
     }
 
     .navbar-nav .nav-link {
-        padding: 10px 15px; /* ¸µÅ©ÀÇ ÆĞµù Á¶Á¤ */
-        font-family: Arial, sans-serif; /* ÆùÆ® º¯°æ */
-        font-size: 20px; /* ÆùÆ® Å©±â º¯°æ */
+        padding: 10px 15px; /* ë§í¬ì˜ íŒ¨ë”© ì¡°ì • */
+        font-family: Arial, sans-serif; /* í°íŠ¸ ë³€ê²½ */
+        font-size: 20px; /* í°íŠ¸ í¬ê¸° ë³€ê²½ */
 
     }
     .text-end {

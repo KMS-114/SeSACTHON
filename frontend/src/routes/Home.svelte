@@ -1,6 +1,6 @@
 <script>
     import { navigate } from 'svelte-routing';
-    import Navbar from '../Navbar.svelte';
+    import Navbar from './Navbar.svelte';
 </script>
 
 <Navbar />

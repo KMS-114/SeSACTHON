@@ -131,7 +131,7 @@
       <div class="half-width">
         <a href="#" class="navbar_logo-link w-nav-brand">
 
-          <div class="logotxt" on:click="{() => navigate('/home')}">거대<span class="text-brand" on:click="{() => navigate('/home')}">박격포</span></div>
+          <div class="logotxt" on:click="{() => navigate('/')}">거대<span class="text-brand" on:click="{() => navigate('/')}">박격포</span></div>
         </a>
         <form id="wf-form-signup" name="wf-form-signup" data-name="signup" method="get" data-ms-form="signup"
               class="form-container" on:submit={signup}>

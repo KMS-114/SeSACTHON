@@ -22,7 +22,7 @@
       const data = await response.json();
       localStorage.setItem('token', data.access_token);
       alert('Login successful');
-      navigate('/', { replace: true });
+      navigate('/home', { replace: true });
     } else {
       alert('Login failed');
     }
@@ -43,6 +43,7 @@
     justify-content: center;
     align-items: center;
     background-color: #f8f9fa;
+    position: fixed;
   }
 
   .page-wrapper {
@@ -127,7 +128,7 @@
   <div class="section_half-half">
     <div class="half-width">
       <a href="#" class="navbar_logo-link w-nav-brand">
-        <div class="logotxt">Big<span class="text-brand">Bak</span></div>
+        <div class="logotxt" on:click="{() => navigate('/home')}">거대<span class="text-brand" on:click="{() => navigate('/home')}">박격포</span></div>
       </a>
       <form id="wf-form-signup" name="wf-form-signup" data-name="signup" method="get" data-ms-form="login"
             class="form-container" on:submit={login}>
@@ -145,7 +146,10 @@
         <input type="submit" class="button" value="Log In" />
       </form>
       <div class="faint-text">
-        <div>Need an account? <a href="/signup">Sign up</a></div>
+        <div>Need an account?
+          <a href="#" on:click="{() => navigate('/signup')}">Sing up
+          </a>
+        </div>
       </div>
       <div>Copyright ? 2022 My Company.</div>
     </div>
