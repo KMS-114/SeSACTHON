@@ -1,0 +1,171 @@
+<script>
+    import { navigate } from 'svelte-routing';
+    import { writable } from 'svelte/store';
+  
+    let firstName = '';
+    let lastName = '';
+    let signUpEmail = '';
+    let password = '';
+  
+    async function signup(event) {
+      event.preventDefault();
+      const response = await fetch('http://localhost:8000/user/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: firstName,
+          lastName: lastName,
+          email: signUpEmail,
+          password: password,
+          phone: '000-0000-0000'  // Assuming you have a default phone or need to adjust this field
+        }),
+      });
+  
+      if (response.ok) {
+        alert('Signup successful');
+        navigate('/login', { replace: true });
+      } else {
+        alert('Signup failed');
+      }
+    }
+  </script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+  
+    body, html {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f8f9fa;
+    }
+  
+    .page-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 100%;
+    }
+  
+    .section_half-half {
+      display: flex;
+      width: 100%;
+      height: 100%;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      background-color: white;
+    }
+  
+    .half-width {
+      width: 50%;
+      padding: 40px;
+      box-sizing: border-box;
+    }
+  
+    .form-container {
+      width: 100%;
+    }
+  
+    .h1-small {
+      font-size: 24px;
+      font-weight: 600;
+    }
+  
+    .input-wrapper {
+      margin-bottom: 20px;
+    }
+  
+    .input-label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+    }
+  
+    .input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ced4da;
+      border-radius: 4px;
+    }
+  
+    .button {
+      width: 100%;
+      padding: 10px;
+      background-color: #007bff;
+      border: none;
+      color: white;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  
+    .button:hover {
+      background-color: #0056b3;
+    }
+  
+    .faint-text {
+      text-align: center;
+      margin-top: 20px;
+    }
+  
+    .faint-text a {
+      color: #007bff;
+      text-decoration: none;
+    }
+  
+    .faint-text a:hover {
+      text-decoration: underline;
+    }
+  </style>
+  
+  <div class="page-wrapper">
+    <div class="section_half-half">
+      <div class="half-width">
+        <a href="#" class="navbar_logo-link w-nav-brand">
+          <div class="logotxt">Big<span class="text-brand">Bak</span></div>
+        </a>
+        <form id="wf-form-signup" name="wf-form-signup" data-name="signup" method="get" data-ms-form="signup"
+              class="form-container" on:submit={signup}>
+          <h1 class="h1-small">Create an account</h1>
+          <div class="input-wrapper">
+            <label for="First-Name-4" class="input-label">First Name</label>
+            <input class="input" maxlength="256" name="First-Name-4" data-name="First Name 4"
+                   placeholder="e.g. Howard" type="text" id="First-Name-4" bind:value={firstName} required />
+          </div>
+          <div class="input-wrapper">
+            <label for="Last-Name-4" class="input-label">Last Name</label>
+            <input class="input" maxlength="256" name="Last-Name-4" data-name="Last Name 4"
+                   placeholder="e.g. Thurman" type="text" id="Last-Name-4" bind:value={lastName} required />
+          </div>
+          <div class="input-wrapper">
+            <label for="Email-5" class="input-label">Email</label>
+            <input class="input" maxlength="256" name="Email-5" data-name="Email 5"
+                   placeholder="e.g. howard.thurman@gmail.com" type="email" id="Email-5" bind:value={signUpEmail}
+                   required />
+          </div>
+          <div class="input-wrapper">
+            <label for="Password-4" class="input-label">Password</label>
+            <input class="input" maxlength="256" name="Password-4" data-name="Password 4" placeholder=""
+                   type="password" id="Password-4" bind:value={password} required />
+          </div>
+          <input type="submit" class="button" value="Sign Up" />
+        </form>
+        <div class="faint-text">
+          <div>Have an account? <a href="/login" class="link">Sign In</a></div>
+        </div>
+        <div>Copyright ? 2022 My Company.</div>
+      </div>
+      <div class="half-width" style="background-color: green;">
+        <!-- Optional content for the second half, like an image or additional information -->
+      </div>
+    </div>
+  </div>
+  
