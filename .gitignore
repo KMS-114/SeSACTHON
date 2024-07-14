@@ -2,3 +2,4 @@ __pycache__
 database/mongo/
 database/sqlite/
 .DS_Store
+.env
