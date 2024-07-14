@@ -1,4 +1,4 @@
 __pycache__
-Database/mongo/
-Database/sqlite/
+database/mongo/
+database/sqlite/
 .DS_Store

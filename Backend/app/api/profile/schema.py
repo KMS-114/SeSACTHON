@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from datetime import date
+from datetime import date, datetime
 
 
 class Career(BaseModel):
@@ -9,9 +9,8 @@ class Career(BaseModel):
     summary: str
 
 
-class Profile(BaseModel):
-    profileId: int
-    userId: int
+class ProfileModel(BaseModel):
+    userId: str
 
     name: str
     birth: date
@@ -20,5 +19,9 @@ class Profile(BaseModel):
     skills: list[str] = []
     careers: list[Career] = []
 
-    createdAt: date
-    updatedAt: date = None
+    createdAt: datetime
+    updatedAt: datetime
+
+
+class ProfileCollection(BaseModel):
+    profiles: list[ProfileModel]

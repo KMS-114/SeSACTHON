@@ -1,34 +1,11 @@
-'''
-데이터베이스 설정 파일
-DB 기본 연결 접속 등을 관리
+from typing import Annotated
 
-ORM(object relational mapping)
-사용시 DB종류에 상관 없이 코드 일관되게 사용 가능
-'''
-
-import sqlalchemy
-from sqlalchemy.orm import sessionmaker, Session
-from pymongo import MongoClient
+from pydantic.functional_validators import BeforeValidator
+from motor.motor_asyncio import AsyncIOMotorClient
 
 
-def get_rdb_session() -> Session:
-    try:
-        engine = sqlalchemy.create_engine('sqlite:////database/sqlite/sqlite3.db')
-        session = sessionmaker(bind=engine)()
-        return session
-    finally:
-        session.close()
+MONGODB_URL = "mongodb://hackerton-mongo:27017/"
+client = AsyncIOMotorClient(MONGODB_URL)
+mongodb = client.get_database("hackerton")
 
-
-def get_mongo_database() -> MongoClient:
-    client = MongoClient("mongodb://hackerton-mongo:27017/")
-    db = client.get_database("hackerton")
-    return db
-
-# Async database
-# async def get_async_db():
-#     db = AsyncSession(bind=async_engine)
-#     try:
-#         yield db
-#     finally:
-#         await db.close()
+PyObjectId = Annotated[str, BeforeValidator(str)]

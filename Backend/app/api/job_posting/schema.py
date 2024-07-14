@@ -1,5 +1,9 @@
-from pydantic import BaseModel
+from typing import Optional
 from datetime import datetime
+
+from pydantic import BaseModel, Field
+
+from ...database import PyObjectId
 
 
 class QualificationRequired(BaseModel):
@@ -14,9 +18,9 @@ class CoverLetterQuestion(BaseModel):
     charLimit: int
 
 
-class JobPosting(BaseModel):
-    jobPostingId: int
-    userId: int
+class JobPostingModel(BaseModel):
+    id: Optional[PyObjectId] = Field(alias='_id', default=None)
+    userId: str
     title: str
     description: str
 
@@ -25,3 +29,7 @@ class JobPosting(BaseModel):
 
     createdAt: datetime
     updatedAt: datetime
+
+
+class JobPostingCollection(BaseModel):
+    jobPostings: list[JobPostingModel]
