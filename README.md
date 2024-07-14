@@ -10,6 +10,7 @@ cd frontend
 npm install
 npm install svelte-routing
 npm install less less-loader --save-dev
+npm install svelte-spa-router
 npx lessc src/styles/login.less src/styles/styles.css
 npm install bootstrap@5.3.3
 npm run dev

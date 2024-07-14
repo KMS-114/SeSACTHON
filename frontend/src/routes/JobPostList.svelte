@@ -1,238 +1,237 @@
 <script>
+  import { onMount } from 'svelte';
   import { navigate } from 'svelte-routing';
+
+  // WebFont 로드 스크립트
+  onMount(() => {
+      WebFont.load({
+          google: {
+              families: [
+                  "Plus Jakarta Sans:200,300,regular,500,600,700,800",
+                  "Krona One:regular",
+                  "Belleza:regular",
+                  "Space Grotesk:300,regular,500,600,700",
+                  "Outfit:100,200,300,regular,500,600,700,800,900",
+                  "Inter:100,200,300,regular,500,600,700,800,900",
+                  "Red Hat Display:300,regular,500,600,700,800,900"
+              ]
+          }
+      });
+  });
+
+  // Memberstack 스크립트
+  onMount(() => {
+      const script = document.createElement('script');
+      script.src = "https://static.memberstack.com/scripts/v1/memberstack.js";
+      script.setAttribute('data-memberstack-app', 'app_cldu48z87008m0uky7sx82rmu');
+      script.async = true;
+      document.body.appendChild(script);
+  });
 </script>
 
 <style>
-  * {
+  @import "../styles/styles.css";
+  main {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-  }
-
-  body, html {
     height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #f8f9fa;
-  }
-  .logotxt {
-    color:black;
-  }
-  .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    background-color: white;
-    padding: 10px 20px;
-    color: black;
-    position: fixed;
-    width: 100%;
-  }
+    overflow: auto; /* Ensure scrollbars are enabled */
+}
 
-  .navbar a {
-    color: #f2f2f2;
-    text-decoration: none;
-    padding: 8px 16px;
-  }
+  .lightbox-modal {
+        position: fixed;
+        display: none;
+    }
 
-  .navbar a:hover {
-    background-color: #ddd;
-    color: black;
-  }
-  .navbar-link {
-    margin: 0 1rem;
-    text-decoration: none;
-    color: black; /* 글자 색깔을 검정색으로 설정 */
-  }
+    a, button, input {
+        transition: 200ms;
+    }
 
-  .container {
-    padding: 20px;
-    max-width: 1200px;
-    margin: auto;
-    width: 100%;
-    position:relative;
-    top: 0px;
-  }
+    #job-description {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        line-clamp: 4;
+        -webkit-box-orient: vertical;
+    }
 
-  .search-form {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-  }
+    .navbar {
+      position: fixed;
+      top: 10px;
+      margin-top: auto;
+      width: 100%;
+      z-index: 1000;
+    }
 
-  .search-bar {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0;
-    box-sizing: border-box;
-  }
+    .form-block {
+      position: relative;
+      top: 0px;
+      margin-top: auto; /* Adjust as needed */
+      padding: 0; /* Remove padding if not necessary */
+      }
 
-  .cb-filters-wrap {
-    display: flex;
-    justify-content: space-between;
-  }
+    .button_container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
 
-  .cb-filters-wrap label {
-    display: flex;
-    align-items: center;
-  }
-
-  .cb-filters-wrap input {
-    margin-right: 10px;
-  }
-
-  .job-flex_rel {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .wide-list {
-    width: 70%;
-  }
-
-  .job-card_main {
-    background: white;
-    padding: 15px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-
-  .new-card-content {
-    display: flex;
-    flex-direction: column;
-  }
-
-  .info-wrap {
-    margin-bottom: 10px;
-  }
-
-  .right-job-box {
-    width: 28%;
-  }
-
-  .big-button {
-    display: block;
-    width: 100%;
-    text-align: center;
-    background-color: #28a745;
-    color: white;
-    padding: 10px;
-    border-radius: 5px;
-    text-decoration: none;
-    margin-bottom: 20px;
-  }
-
-  .big-button:hover {
-    background-color: #218838;
-  }
-
-  .card-padding {
-    padding: 15px;
-    background-color: #f8f9fa;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-  }
-
-  .toast-wrapper {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    width: 300px;
-    z-index: 1000;
-  }
-
-  .toast-box-d {
-    padding: 10px;
-    background-color: #444;
-    color: #fff;
-    border-radius: 5px;
-    margin-bottom: 10px;
-  }
-
-  .toast-box-d.red {
-    background-color: #e40023;
-  }
-
-  .toast-content {
-    display: flex;
-    align-items: center;
-  }
-
-  .toast-content .toast-icon-d {
-    margin-right: 10px;
-  }
 </style>
 
-<div class="navbar">
-  <a href="/" class="navbar_logo-link w-nav-brand w--current">
-    <div class="logotxt">거대<span class="text-brand">박격포</span></div>
-  </a>
-  <div>
-    <a class="button in-nav w-button" on:click={() => navigate('/job-post-submission-form')}>Post a job</a>
-  </div>
-</div>
-
-<div class="container">
-  <form id="email-form" name="email-form" action="/" method="get" class="search-form">
-    <input class="search-bar" maxlength="256" name="job-search" placeholder="Search for a job..." type="text" id="job-search" />
-    <div class="cb-filters-wrap">
-      <label>
-        <input type="checkbox" name="Remote" />
-        Remote
-      </label>
-      <label>
-        <input type="checkbox" name="In Office" />
-        In Office
-      </label>
-    </div>
-  </form>
-
-  <div class="job-flex_rel">
-    <div class="wide-list">
-      <div class="job-card_main">
-        <div class="new-card-content">
-          <div class="info-wrap">
-            <a href="/job-posts/test-d657a" class="h3_job">test</a>
-            <div class="spacer-10"></div>
-            <div class="flex-center space-between">
-              <div class="location-wrap">
-                <div class="icon-jobs w-embed">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 5V2C7 1.73478 7.10536 1.48043 7.29289 1.29289C7.48043 1.10536 7.73478 1 8 1H16C16.2652 1 16.5196 1.10536 16.7071 1.29289C16.8946 1.48043 17 1.73478 17 2V5H21C21.2652 5 21.5196 5.10536 21.7071 5.29289C21.8946 5.48043 22 5.73478 22 6V20C22 20.2652 21.8946 20.5196 21.7071 20.7071C21.5196 20.8946 21.2652 21 21 21H3C2.73478 21 2.48043 20.8946 2.29289 20.7071C2.10536 20.5196 2 20.2652 2 20V6C2 5.73478 2.10536 5.48043 2.29289 5.29289C2.48043 5.10536 2.73478 5 3 5H7ZM4 16V19H20V16H4ZM4 14H20V7H4V14ZM9 3V5H15V3H9ZM11 11H13V13H11V11Z" fill="currentColor" />
-                  </svg>
-                </div>
-                <p class="paragraph">test</p>
-              </div>
-              <div class="location-wrap">
-                <div class="icon-jobs w-embed">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M7 5V2C7 1.73478 7.10536 1.48043 7.29289 1.29289C7.48043 1.10536 7.73478 1 8 1H16C16.2652 1 16.5196 1.10536 16.7071 1.29289C16.8946 1.48043 17 1.73478 17 2V5H21C21.2652 5 21.5196 5.10536 21.7071 5.29289C21.8946 5.48043 22 5.73478 22 6V20C22 20.2652 21.8946 20.5196 21.7071 20.7071C21.5196 20.8946 21.2652 21 21 21H3C2.73478 21 2.48043 20.8946 2.29289 20.7071C2.10536 20.5196 2 20.2652 2 20V6C2 5.73478 2.10536 5.48043 2.29289 5.29289C2.48043 5.10536 2.73478 5 3 5H7ZM4 16V19H20V16H4ZM4 14H20V7H4V14ZM9 3V5H15V3H9ZM11 11H13V13H11V11Z" fill="currentColor" />
-                  </svg>
-                </div>
-                <p class="paragraph">test</p>
-              </div>
-              <div class="location-wrap">
-                <div class="icon-jobs w-embed">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 23.7279L5.636 17.3639C4.37734 16.1052 3.52019 14.5016 3.17293 12.7558C2.82567 11.0099 3.00391 9.20035 3.6851 7.55582C4.36629 5.91129 5.51984 4.50569 6.99988 3.51677C8.47992 2.52784 10.22 2 12 2C13.78 2 15.5201 2.52784 17.0001 3.51677C18.4802 4.50569 19.6337 5.91129 20.3149 7.55582C20.9961 9.20035 21.1743 11.0099 20.8271 12.7558C20.4798 14.5016 19.6227 16.1052 18.364 17.3639L12 23.7279ZM16.95 15.9499C17.9289 14.9709 18.5955 13.7236 18.8656 12.3658C19.1356 11.0079 18.9969 9.60052 18.4671 8.32148C17.9373 7.04244 17.04 5.94923 15.8889 5.18009C14.7378 4.41095 13.3844 4.00043 12 4.00043C10.6156 4.00043 9.26222 4.41095 8.11109 5.18009C6.95996 5.94923 6.06275 7.04244 5.53292 8.32148C5.00308 9.60052 4.86442 11.0079 5.13445 12.3658C5.40449 13.7236 6.07111 14.9709 7.05 15.9499L12 20.8999L16.95 15.9499V15.9499ZM12 12.9999C11.4696 12.9999 10.9609 12.7892 10.5858 12.4141C10.2107 12.0391 10 11.5304 10 10.9999C10 10.4695 10.2107 9.96078 10.5858 9.58571C10.9609 9.21064 11.4696 8.99992 12 8.99992C12.5304 8.99992 13.0391 9.21064 13.4142 9.58571C13.7893 9.96078 14 10.4695 14 10.9999C14 11.5304 13.7893 12.0391 13.4142 12.4141C13.0391 12.7892 12.5304 12.9999 12 12.9999Z" fill="currentColor" />
-                  </svg>
-                </div>
-                <p class="paragraph">New york</p>
-              </div>
-            </div>
-          </div>
-          <div class="date-light">1 Feb</div>
+<main>
+  <div class="navbar w-nav">
+    <div class="navbar-container">
+        <a href="/" aria-current="page" class="navbar_logo-link w-nav-brand w--current">
+            <div class="logotxt">Big<span class="text-brand">Bak</span></div>
+        </a>
+        <div class="button_container">
+          <button class="btn" on:click={() => navigate('/jobpost')}><span>Post a job</span></button>
         </div>
-      </div>
+        <div class="hamburger w-nav-button">
+            <div class="hamburger_line-wrap">
+                <div class="hamburger_line-top"></div>
+                <div class="hamburger_line-middle">
+                    <div class="hamburger_line-middle-in"></div>
+                </div>
+                <div class="hamburger_line-bottom"></div>
+            </div>
+        </div>
     </div>
-    <div class="right-job-box">
-      <a href="/job-post-submission-form" class="big-button w-button" on:click={() => navigate('/job-post-submission-form')}>Post a job<br /><span class="small-in-button">100% free!</span></a>
-      <div class="card-padding">
-        <p><strong>Discover qualified candidates to fill your open positions on CrunchBoard.<br /><br />‍</strong>CrunchBoard is the official job board of TechCrunch, leveraging an engaged and specialized audience each month to help you get your job vacancies filled. Jobs posted on CrunchBoard will be visible on the TechCrunch network including the website, daily newsletters and social channels.</p>
+</div>
+
+<div class="form-block top-block w-form">
+  <form id="email-form" name="email-form" data-name="Email Form" action="/" method="get" class="search-form" data-wf-page-id="66910b4a24038ed5a6231f45" data-wf-element-id="2d7fb233-5d2d-9d8d-4ea1-bdfa0bfb6fb6">
+      <input class="search-bar w-input" maxlength="256" name="job-search" data-name="job-search" r-filter="name" placeholder="Search for a job..." type="text" id="job-search" />
+      <div r-filter="type" class="cb-filters-wrap">
+          <label class="w-checkbox select-checkbox">
+              <div class="w-checkbox-input w-checkbox-input--inputType-custom check-box"></div>
+              <input id="Remote" type="checkbox" name="Remote" data-name="Remote" style="opacity:0;position:absolute;z-index:-1" />
+              <span class="cb-label w-form-label" for="Remote">Remote</span>
+          </label>
+          <label class="w-checkbox select-checkbox">
+              <div class="w-checkbox-input w-checkbox-input--inputType-custom check-box"></div>
+              <input id="checkbox-2" type="checkbox" name="checkbox-2" data-name="Checkbox 2" style="opacity:0;position:absolute;z-index:-1" />
+              <span class="cb-label w-form-label" for="checkbox-2">In Office</span>
+          </label>
       </div>
-    </div>
+  </form>
+  <div class="w-form-done">
+      <div>Thank you! Your submission has been received!</div>
+  </div>
+  <div class="w-form-fail">
+      <div>Oops! Something went wrong while submitting the form.</div>
   </div>
 </div>
+
+  <div class="section dark-50">
+      <div class="container">
+          <div class="job-flex_rel">
+              <div class="wide-list w-dyn-list">
+                  <div r-filter-wrapper="1" role="list" class="masonry-grid w-dyn-items">
+                      <div role="listitem" class="w-dyn-item">
+
+                          <div class="job-card_main">
+                              <div class="new-card-content">
+                                  <div class="info-wrap">
+                                      <a r-indexed="name" href="/job-posts/test-d657a" class="h3_job">test</a>
+                                      <div class="spacer-10"></div>
+                                      <div class="flex-center space-between">
+                                          <div class="location-wrap">
+                                              <div class="icon-jobs w-embed">
+                                                  <svg width="420" height="420" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                      <path d="M7 5V2C7 1.73478 7.10536 1.48043 7.29289 1.29289C7.48043 1.10536 7.73478 1 8 1H16C16.2652 1 16.5196 1.10536 16.7071 1.29289C16.8946 1.48043 17 1.73478 17 2V5H21C21.2652 5 21.5196 5.10536 21.7071 5.29289C21.8946 5.48043 22 5.73478 22 6V20C22 20.2652 21.8946 20.5196 21.7071 20.7071C21.5196 20.8946 21.2652 21 21 21H3C2.73478 21 2.48043 20.8946 2.29289 20.7071C2.10536 20.5196 2 20.2652 2 20V6C2 5.73478 2.10536 5.48043 2.29289 5.29289C2.48043 5.10536 2.73478 5 3 5H7ZM4 16V19H20V16H4ZM4 14H20V7H4V14ZM9 3V5H15V3H9ZM11 11H13V13H11V11Z" fill="currentColor" />
+                                                  </svg>
+                                              </div>
+                                              <p class="paragraph">test</p>
+                                          </div>
+                                          <div class="location-wrap">
+                                              <div class="icon-jobs w-embed">
+                                                  <svg width="420" height="420" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                      <path d="M12 23.7279L5.636 17.3639C4.37734 16.1052 3.52019 14.5016 3.17293 12.7558C2.82567 11.0099 3.00391 9.20035 3.6851 7.55582C4.36629 5.91129 5.51984 4.50569 6.99988 3.51677C8.47992 2.52784 10.22 2 12 2C13.78 2 15.5201 2.52784 17.0001 3.51677C18.4802 4.50569 19.6337 5.91129 20.3149 7.55582C20.9961 9.20035 21.1743 11.0099 20.8271 12.7558C20.4798 14.5016 19.6227 16.1052 18.364 17.3639L12 23.7279ZM16.95 15.9499C17.9289 14.9709 18.5955 13.7236 18.8656 12.3658C19.1356 11.0079 18.9969 9.60052 18.4671 8.32148C17.9373 7.04244 17.04 5.94923 15.8889 5.18009C14.7378 4.41095 13.3844 4.00043 12 4.00043C10.6156 4.00043 9.26222 4.41095 8.11109 5.18009C6.95996 5.94923 6.06275 7.04244 5.53292 8.32148C5.00308 9.60052 4.86442 11.0079 5.13445 12.3658C5.40449 13.7236 6.07111 14.9709 7.05 15.9499L12 20.8999L16.95 15.9499V15.9499ZM12 12.9999C11.4696 12.9999 10.9609 12.7892 10.5858 12.4141C10.2107 12.0391 10 11.5304 10 10.9999C10 10.4695 10.2107 9.96078 10.5858 9.58571C10.9609 9.21064 11.4696 8.99992 12 8.99992C12.5304 8.99992 13.0391 9.21064 13.4142 9.58571C13.7893 9.96078 14 10.4695 14 10.9999C14 11.5304 13.7893 12.0391 13.4142 12.4141C13.0391 12.7892 12.5304 12.9999 12 12.9999Z" fill="currentColor" />
+                                                  </svg>
+                                              </div>
+                                              <p r-indexed="type" class="paragraph">test</p>
+                                          </div>
+                                          <div class="location-wrap">
+                                              <div class="icon-jobs w-embed">
+                                                  <svg width="420" height="420" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                      <path d="M12 23.7279L5.636 17.3639C4.37734 16.1052 3.52019 14.5016 3.17293 12.7558C2.82567 11.0099 3.00391 9.20035 3.6851 7.55582C4.36629 5.91129 5.51984 4.50569 6.99988 3.51677C8.47992 2.52784 10.22 2 12 2C13.78 2 15.5201 2.52784 17.0001 3.51677C18.4802 4.50569 19.6337 5.91129 20.3149 7.55582C20.9961 9.20035 21.1743 11.0099 20.8271 12.7558C20.4798 14.5016 19.6227 16.1052 18.364 17.3639L12 23.7279ZM16.95 15.9499C17.9289 14.9709 18.5955 13.7236 18.8656 12.3658C19.1356 11.0079 18.9969 9.60052 18.4671 8.32148C17.9373 7.04244 17.04 5.94923 15.8889 5.18009C14.7378 4.41095 13.3844 4.00043 12 4.00043C10.6156 4.00043 9.26222 4.41095 8.11109 5.18009C6.95996 5.94923 6.06275 7.04244 5.53292 8.32148C5.00308 9.60052 4.86442 11.0079 5.13445 12.3658C5.40449 13.7236 6.07111 14.9709 7.05 15.9499L12 20.8999L16.95 15.9499V15.9499ZM12 12.9999C11.4696 12.9999 10.9609 12.7892 10.5858 12.4141C10.2107 12.0391 10 11.5304 10 10.9999C10 10.4695 10.2107 9.96078 10.5858 9.58571C10.9609 9.21064 11.4696 8.99992 12 8.99992C12.5304 8.99992 13.0391 9.21064 13.4142 9.58571C13.7893 9.96078 14 10.4695 14 10.9999C14 11.5304 13.7893 12.0391 13.4142 12.4141C13.0391 12.7892 12.5304 12.9999 12 12.9999Z" fill="currentColor" />
+                                                  </svg>
+                                              </div>
+                                              <p class="paragraph">New york</p>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="date-light">1 Feb</div>
+                              </div>
+                          </div>
+
+                          
+                      </div>
+                  </div>
+              </div>
+
+              <div class="right-job-box">
+                  <a class="big-button w-button" href="#" on:click="{() => navigate('/jobpost')}">Post a job<br /><span class="small-in-button">100% free!</span></a>
+                  <div class="card-padding">
+                      <p>
+                          <strong>
+                              Discover qualified candidates to fill your open positions on CrunchBoard.<br /><br />?
+                          </strong>
+                          CrunchBoard is the official job board of TechCrunch, leveraging an engaged and specialized audience each month to help you get your job vacancies filled. Jobs posted on CrunchBoard will be visible on the TechCrunch network including the website, daily newsletters and social channels.
+                      </p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+
+  <div class="toast-wrapper">
+      <div data-ms-message="success" class="toast-box-d">
+          <div class="toast-content">
+              <div class="toast-color"></div>
+              <div class="toast-icon-d w-embed">
+                  <svg width="30" height="30" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z" fill="currentColor" />
+                  </svg>
+              </div>
+              <div>
+                  <div class="toast-header-d">Yay! It worked</div>
+                  <div data-ms-message-text="true" class="text-secondary">This is a success message.</div>
+              </div>
+          </div>
+          <a data-ms-message-close="true" href="#" class="toast-close-black grey w-inline-block">
+              <div class="w-embed">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="currentColor">
+                      <path d="M0 0h24v24H0V0z" fill="none" />
+                      <path d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z" />
+                  </svg>
+              </div>
+          </a>
+      </div>
+
+      <div data-ms-message="error" class="toast-box-d red">
+          <div class="toast-content">
+              <div class="toast-color red"></div>
+              <div class="toast-icon-d w-embed">
+                  <svg width="30" height="30" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM11 15H9V13H11V15ZM11 11H9V5H11V11Z" fill="#E40023" />
+                  </svg>
+              </div>
+              <div>
+                  <div class="toast-header-d">Uh oh, something went wrong</div>
+                  <div data-ms-message-text="true" class="text-secondary">This is an error message.</div>
+              </div>
+          </div>
+          <a data-ms-message-close="true" href="#" class="toast-close-black grey w-inline-block">
+              <div class="w-embed">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="20" viewBox="0 0 24 24" width="20" fill="currentColor">
+                      <path d="M0 0h24v24H0V0z" fill="none" />
+                      <path d="M18.3 5.71c-.39-.39-1.02-.39-1.41 0L12 10.59 7.11 5.7c-.39-.39-1.02-.39-1.41 0-.39.39-.39 1.02 0 1.41L10.59 12 5.7 16.89c-.39.39-.39 1.02 0 1.41.39.39 1.02.39 1.41 0L12 13.41l4.89 4.89c.39.39 1.02.39 1.41 0 .39-.39.39-1.02 0-1.41L13.41 12l4.89-4.89c.38-.38.38-1.02 0-1.4z" />
+                  </svg>
+              </div>
+          </a>
+      </div>
+  </div>
+</main>

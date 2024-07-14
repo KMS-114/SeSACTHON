@@ -20,6 +20,7 @@
                 </li>
             </ul>
             <div class="text-end">
+                <button type="button" class="btn btn-outline-light me-2" on:click={() => navigate('/jobpost')}>jobpost</button>
                 <button type="button" class="btn btn-outline-light me-2" on:click={() => navigate('/login')}>Login</button>
                 <button type="button" class="btn btn-warning" on:click={() => navigate('/signup')}>Signup</button>
             </div>
@@ -40,7 +41,6 @@
         width: 100%;
         padding-left: 0;
         margin: 0 0px; /* 간격을 더 작게 조정 */
-
     }
 
     .navbar-nav .nav-link {
