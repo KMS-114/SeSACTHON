@@ -1,5 +1,5 @@
 uvicorn
-
+fastapi
 
 # chat
 google-cloud-speech
@@ -7,3 +7,6 @@ urllib3
 openai
 gtts
 playsound==1.2.2
+
+# DB
+sqlalchemy
