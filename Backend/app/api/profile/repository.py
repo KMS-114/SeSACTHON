@@ -1,4 +1,3 @@
-
 from ...database import mongodb
 from .schema import ProfileModel, ProfileCollection
 
@@ -17,16 +16,10 @@ def create_profile_document(text: str):
     answer = gpt.gpt_request()
 
 
-async def create_profile(
-    profile: ProfileModel
-) -> ProfileModel:
+async def create_profile(profile: ProfileModel) -> ProfileModel:
     collection = mongodb.get_collection("profile")
-    new_profile = await collection.insert_one(
-        profile.model_dump()
-    )
-    created_profile = await collection.find_one(
-        {"_id": new_profile.inserted_id}
-    )
+    new_profile = await collection.insert_one(profile.model_dump())
+    created_profile = await collection.find_one({"_id": new_profile.inserted_id})
     return created_profile
 
 

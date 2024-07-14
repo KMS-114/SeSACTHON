@@ -19,7 +19,7 @@ class CoverLetterQuestion(BaseModel):
 
 
 class JobPostingModel(BaseModel):
-    id: Optional[PyObjectId] = Field(alias='_id', default=None)
+    id: Optional[PyObjectId] = Field(alias="_id", default=None)
     userId: str
     title: str
     description: str
