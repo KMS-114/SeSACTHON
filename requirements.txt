@@ -1,1 +1,14 @@
 uvicorn
+fastapi
+gradio
+passlib
+python-jose
+bcrypt==4.0.1
+sqlalchemy
+pydantic
+google-cloud-speech
+urllib3
+openai
+gtts
+playsound==1.2.2
+python-dotenv
