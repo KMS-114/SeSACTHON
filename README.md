@@ -1,28 +1,20 @@
 # SeSACTHON
 
-### dockerization
-1. docker network creation
-```
-docker network create ${network_name}
-```
-2. docker image build
-```
-docker build -t ${image_name} ./backend/
-```
-3. DATABASE container run
-```
-docker run -d --rm \
-    -v ./database/mongo:/data/db \
-    --network ${network_name} \
-    --name hackerton-mongo \
-    mongo
-```
-4. BACKEND container run
-```
-docker run -d --rm \
-    -v ./database:/database \
-    --network hackerton-network \
-    -p 8080:8080 \
-    --name hackerton-backend \
-    ${image_name}
-```
+### Node.js Install
+Node.js
+conda install nodejs
+
+### Svelte Start
+npm create vite@latest frontend -- --template svelte
+cd frontend
+npm install
+npm install svelte-routing
+npm install less less-loader --save-dev
+npm install svelte-spa-router
+npx lessc src/styles/login.less src/styles/styles.css
+npm install bootstrap@5.3.3
+npm run dev
+
+### Fastapi Start
+cmd
+uvicorn main:app --reload
