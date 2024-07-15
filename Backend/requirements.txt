@@ -1,5 +1,11 @@
-uvicorn
+# fastapi
 fastapi
+pydantic
+uvicorn
+
+# # database
+pymongo
+motor
 
 # chat
 google-cloud-speech
@@ -8,5 +14,5 @@ openai
 gtts
 playsound==1.2.2
 
-# DB
-sqlalchemy
+# # audio
+# pyaudio
