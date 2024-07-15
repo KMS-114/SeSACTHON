@@ -1,9 +1,10 @@
-from typing import Optional
+from typing import Optional, Union
 from datetime import datetime
 
 from pydantic import BaseModel, Field
 
 from ...database import PyObjectId
+from ..resume.schema import ResumeCollection
 
 
 class QualificationRequired(BaseModel):
@@ -14,6 +15,7 @@ class QualificationRequired(BaseModel):
 
 
 class CoverLetterQuestion(BaseModel):
+    coverLetterQuestionId: int
     content: str
     charLimit: int
 

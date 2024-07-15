@@ -34,6 +34,6 @@ async def find_user(user_id):
 async def delete_user(user_id):
     collection = mongodb.get_collection("user")
     dropped_user = await find_user(user_id)
-    if not dropped_user:
+    if dropped_user:
         result = await collection.delete_one({"_id": ObjectId(user_id)})
     return dropped_user

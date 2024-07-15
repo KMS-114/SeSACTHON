@@ -28,6 +28,6 @@ async def find_job_posting(job_posting_id: str) -> JobPostingModel:
 async def delete_job_posting(job_posting_id: str):
     collection = mongodb.get_collection("jobPosting")
     dropped_posting = await find_job_posting(job_posting_id)
-    if not dropped_posting:
+    if dropped_posting:
         result = await collection.delete_one({"_id": job_posting_id})
     return dropped_posting
