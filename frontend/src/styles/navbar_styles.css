@@ -4,10 +4,10 @@
     left: 0;
     right: 0;
     z-index: 1000;
-    background-color: #343a40; /* Navbar ¹è°æ»ö ¼³Á¤ (¿øÇÏ´Â »ö»óÀ¸·Î º¯°æ °¡´É) */
+    background-color: #343a40; /* Navbar ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½) */
 }
 .navbar {
-    margin-bottom: 50px; /* °£°ÝÀ» ÁÙÀÓ */
+    margin-bottom: 50px; /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ */
     position: fixed;
     width: 100%;
 }
@@ -20,13 +20,13 @@
 }
 
 .navbar-nav .nav-item {
-    margin: 0 0px; /* °£°ÝÀ» ´õ ÀÛ°Ô Á¶Á¤ */
+    margin: 0 0px; /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Û°ï¿½ ï¿½ï¿½ï¿½ï¿½ */
 }
 
 .navbar-nav .nav-link {
-    padding: 10px 15px; /* ¸µÅ©ÀÇ ÆÐµù Á¶Á¤ */
-    font-family: Arial, sans-serif; /* ÆùÆ® º¯°æ */
-    font-size: 16px; /* ÆùÆ® Å©±â º¯°æ */
+    padding: 10px 15px; /* ï¿½ï¿½Å©ï¿½ï¿½ ï¿½Ðµï¿½ ï¿½ï¿½ï¿½ï¿½ */
+    font-family: Arial, sans-serif; /* ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ */
+    font-size: 16px; /* ï¿½ï¿½Æ® Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ */
 }
 
 .text-end {

@@ -14,6 +14,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" on:click="{() => navigate('/jobpostlist')}">Job Posting</a>
+                    <!-- <a class="nav-link" href="/jobpostlist">Job Post List</a> -->
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/login">Profile</a>

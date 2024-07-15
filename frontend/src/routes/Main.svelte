@@ -87,7 +87,6 @@ html, body {
 <div class="container">
   <p class="description">채용 공고 홈페이지입니다.</p>
   <div class="button_container">
-    <button class="btn" on:click={() => navigate('/jobpost')}><span>jobpost</span></button>
     <button class="btn" on:click={() => navigate('/login')}><span>Login</span></button>
     <button class="btn" on:click={() => navigate('/signup')}><span>Signup</span></button>
   </div>
