@@ -9,19 +9,52 @@
     import JobDetail from './routes/jobpost/JobDetail.svelte';
     import UserProfile from './routes/UserProfile.svelte';
 
+    import { isLoggedIn, userType } from './lib/store';
+
+
     // 처음 접속 시 메인 페이지로 리디렉션
     if (!localStorage.getItem('token')) {
         navigate('/', { replace: true });
+    }
+    let loggedIn = false;
+    let currentUserType = "1";
+
+    // 로그인 상태 구독
+    isLoggedIn.subscribe(value => {
+        loggedIn = value;
+    });
+
+    // 고용주, 지원자 상태
+    userType.subscribe(value => {
+        currentUserType = value;
+    });
+
+    // 라우터 가드 기능
+    function requireAuth(path, component) {
+    return {
+        path,
+        component,
+        action: () => {
+        if (!userLoggedIn) {
+            navigate('/login'); // 로그인되지 않은 경우 로그인 페이지로 리디렉션
+            }
+        }
+    };
     }
 </script>
 
 <Router>
     <Route path="/" component={Main} />
-    <Route path="/home" component={Home} />
     <Route path="/login" component={Login} />
     <Route path="/signup" component={Signup} />
-    <Route path="/jobpostlist" component={JobPostList} />
-    <Route path="/jobpost" component={JobPost} />
-    <Route path="/jobdetail:id" component={JobDetail} />
-    <Route path="/profile" component={UserProfile} />
+    {#if loggedIn}
+        <Route path="/home" component={Home} />
+        <Route path="/jobpostlist" component={JobPostList} />
+        <Route path="/jobpost" component={JobPost} />
+        <Route path="/jobdetail:id" component={JobDetail} />
+    {/if}
+    {#if currentUserType === '2'}
+        <Route path="/profile" component={UserProfile} />
+    {/if}
+
 </Router>

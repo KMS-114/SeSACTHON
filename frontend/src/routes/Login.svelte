@@ -1,18 +1,20 @@
 <script>
   import { navigate } from 'svelte-routing';
   import { writable } from 'svelte/store';
+  import { isLoggedIn, user } from '../lib/store';
 
   let email = '';
   let password = '';
+  let userGroup = ''; // 사용자 유형 선택
 
   async function login(event) {
     event.preventDefault();
-    const response = await fetch('http://localhost:8000/user/login', {
+    const response = await fetch('http://localhost:8000/login', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
+        'Content-Type': 'application/json',
       },
-      body: new URLSearchParams({
+      body: JSON.stringify({
         'username': email,
         'password': password,
       }),
@@ -20,9 +22,18 @@
 
     if (response.ok) {
       const data = await response.json();
+      isLoggedIn.set(true);
+      user.set({ email });
+      userType.set(userGroup);
       localStorage.setItem('token', data.access_token);
       alert('Login successful');
-      navigate('/home', { replace: true });
+      if (userGroup === '1') {
+        navigate('/home', { replace: true });
+      } else if (userGroup === '2') {
+        navigate('/home', { replace: true });
+      } else {
+        navigate('/', { replace: true });
+      }
     } else {
       alert('Login failed');
     }
@@ -122,6 +133,9 @@
   .faint-text a:hover {
     text-decoration: underline;
   }
+  .select{
+    padding: 10px;
+  }
 </style>
 
 <div class="page-wrapper">
@@ -143,6 +157,13 @@
           <input class="input" maxlength="256" name="Password-4" data-name="Password 4" placeholder=""
                  type="password" bind:value={password} required />
         </div>
+
+        <select bind:value={userGroup}>
+          <option value="" disabled selected>Select user type</option>
+          <option value="1">Employer</option>
+          <option value="2">Applicant</option>
+        </select>
+
         <input type="submit" class="button" value="Log In" />
       </form>
       <div class="faint-text">

@@ -5,8 +5,27 @@ from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel, EmailStr
 
 app = FastAPI()
+
+# 더미 유저 데이터
+dummy_user = {
+    "username": "testuser@example.com",
+    "password": "testpassword"
+}
+
+class LoginRequest(BaseModel):
+    email: EmailStr
+    password: str
+
+@app.post("/login")
+async def login(request: LoginRequest):
+    if request.email == dummy_user["username"] and request.password == dummy_user["password"]:
+        return {"message": "Login successful"}
+    else:
+        raise HTTPException(status_code=401, detail="Invalid credentials")
+
 
 DATABASE_URL = "sqlite:///./test.db"
 

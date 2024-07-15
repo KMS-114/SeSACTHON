@@ -30,9 +30,9 @@
         alert('Signup failed');
       }
     }
-  </script>
+</script>
   
-  <style>
+<style>
     * {
       margin: 0;
       padding: 0;
@@ -124,52 +124,52 @@
     .faint-text a:hover {
       text-decoration: underline;
     }
-  </style>
+</style>
   
-  <div class="page-wrapper">
-    <div class="section_half-half">
-      <div class="half-width">
-        <a href="#" class="navbar_logo-link w-nav-brand">
+<div class="page-wrapper">
+  <div class="section_half-half">
+    <div class="half-width">
+      <a href="#" class="navbar_logo-link w-nav-brand">
 
-          <div class="logotxt" on:click="{() => navigate('/home')}">거대<span class="text-brand" on:click="{() => navigate('/home')}">박격포</span></div>
-        </a>
-        <form id="wf-form-signup" name="wf-form-signup" data-name="signup" method="get" data-ms-form="signup"
-              class="form-container" on:submit={signup}>
-          <h1 class="h1-small">Create an account</h1>
-          <div class="input-wrapper">
-            <label for="First-Name-4" class="input-label">First Name</label>
-            <input class="input" maxlength="256" name="First-Name-4" data-name="First Name 4"
-                   placeholder="e.g. Howard" type="text" id="First-Name-4" bind:value={firstName} required />
-          </div>
-          <div class="input-wrapper">
-            <label for="Last-Name-4" class="input-label">Last Name</label>
-            <input class="input" maxlength="256" name="Last-Name-4" data-name="Last Name 4"
-                   placeholder="e.g. Thurman" type="text" id="Last-Name-4" bind:value={lastName} required />
-          </div>
-          <div class="input-wrapper">
-            <label for="Email-5" class="input-label">Email</label>
-            <input class="input" maxlength="256" name="Email-5" data-name="Email 5"
-                   placeholder="e.g. howard.thurman@gmail.com" type="email" id="Email-5" bind:value={signUpEmail}
-                   required />
-          </div>
-          <div class="input-wrapper">
-            <label for="Password-4" class="input-label">Password</label>
-            <input class="input" maxlength="256" name="Password-4" data-name="Password 4" placeholder=""
-                   type="password" id="Password-4" bind:value={password} required />
-          </div>
-          <input type="submit" class="button" value="Sign Up" />
-        </form>
-        <div class="faint-text">
-          <div>Have an account?
-            <a href="#" on:click="{() => navigate('/login')}">Sign In
-            </a>
-          </div>
+        <div class="logotxt" on:click="{() => navigate('/home')}">거대<span class="text-brand" on:click="{() => navigate('/home')}">박격포</span></div>
+      </a>
+      <form id="wf-form-signup" name="wf-form-signup" data-name="signup" method="get" data-ms-form="signup"
+            class="form-container" on:submit={signup}>
+        <h1 class="h1-small">Create an account</h1>
+        <div class="input-wrapper">
+          <label for="First-Name-4" class="input-label">First Name</label>
+          <input class="input" maxlength="256" name="First-Name-4" data-name="First Name 4"
+                  placeholder="e.g. Howard" type="text" id="First-Name-4" bind:value={firstName} required />
         </div>
-        <div>Copyright ? 2022 My Company.</div>
+        <div class="input-wrapper">
+          <label for="Last-Name-4" class="input-label">Last Name</label>
+          <input class="input" maxlength="256" name="Last-Name-4" data-name="Last Name 4"
+                  placeholder="e.g. Thurman" type="text" id="Last-Name-4" bind:value={lastName} required />
+        </div>
+        <div class="input-wrapper">
+          <label for="Email-5" class="input-label">Email</label>
+          <input class="input" maxlength="256" name="Email-5" data-name="Email 5"
+                  placeholder="e.g. howard.thurman@gmail.com" type="email" id="Email-5" bind:value={signUpEmail}
+                  required />
+        </div>
+        <div class="input-wrapper">
+          <label for="Password-4" class="input-label">Password</label>
+          <input class="input" maxlength="256" name="Password-4" data-name="Password 4" placeholder=""
+                  type="password" id="Password-4" bind:value={password} required />
+        </div>
+        <input type="submit" class="button" value="Sign Up" />
+      </form>
+      <div class="faint-text">
+        <div>Have an account?
+          <a href="#" on:click="{() => navigate('/login')}">Sign In
+          </a>
+        </div>
       </div>
-      <div class="half-width" style="background-color: green;">
-        <!-- Optional content for the second half, like an image or additional information -->
-      </div>
+      <div>Copyright ? 2022 My Company.</div>
+    </div>
+    <div class="half-width" style="background-color: green;">
+      <!-- Optional content for the second half, like an image or additional information -->
     </div>
   </div>
+</div>
   
