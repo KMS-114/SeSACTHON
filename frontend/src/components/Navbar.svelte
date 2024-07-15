@@ -10,14 +10,16 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link" href="/">Home</a>
+                    <a class="nav-link" on:click="{() => navigate('/home')}">Home</a>
+                    <!-- <a class="nav-link" href="/home">Home</a> -->
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" on:click="{() => navigate('/jobpostlist')}">Job Posting</a>
                     <!-- <a class="nav-link" href="/jobpostlist">Job Post List</a> -->
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/login">Profile</a>
+                    <a class="nav-link" on:click="{() => navigate('/profile')}">Profile</a>
+                    <!-- <a class="nav-link" href="/login">Profile</a> -->
                 </li>
             </ul>
             <div class="text-end">

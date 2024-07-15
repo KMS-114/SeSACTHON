@@ -35,7 +35,7 @@
 
 <Navbar />
 <main class="container">
-    <h1>프로필 작성</h1>
+    <h1>나만의 프로필 작성</h1>
     {#if alertMessage}
         <div class="alert">{alertMessage}</div>
     {/if}

@@ -52,7 +52,7 @@
     {:else}
         <ul class="job-list">
         {#each filteredJobListings as job}
-            <li class="job-item" on:click={() => window.location.hash = `/job/${job.id}`}>
+            <li class="job-item" on:click={() => window.location.hash = `/jobdetail/${job.id}`}>
             <h2>{job.title}</h2>
             <p><strong>회사:</strong> {job.company}</p>
             <p><strong>설명:</strong> {job.description}</p>
