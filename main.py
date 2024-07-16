@@ -9,22 +9,22 @@ from pydantic import BaseModel, EmailStr
 
 app = FastAPI()
 
-# 더미 유저 데이터
-dummy_user = {
-    "username": "testuser@example.com",
-    "password": "testpassword"
-}
+# # 더미 유저 데이터
+# dummy_user = {
+#     "username": "testuser@example.com",
+#     "password": "testpassword"
+# }
 
-class LoginRequest(BaseModel):
-    email: EmailStr
-    password: str
+# class LoginRequest(BaseModel):
+#     email: EmailStr
+#     password: str
 
-@app.post("/login")
-async def login(request: LoginRequest):
-    if request.email == dummy_user["username"] and request.password == dummy_user["password"]:
-        return {"message": "Login successful"}
-    else:
-        raise HTTPException(status_code=401, detail="Invalid credentials")
+# @app.post("/login")
+# async def login(request: LoginRequest):
+#     if request.email == dummy_user["username"] and request.password == dummy_user["password"]:
+#         return {"message": "Login successful"}
+#     else:
+#         raise HTTPException(status_code=401, detail="Invalid credentials")
 
 
 DATABASE_URL = "sqlite:///./test.db"

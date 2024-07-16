@@ -1,42 +1,40 @@
-<script>
+<!-- <script>
   import { onMount } from 'svelte';
-  import { wrap } from 'svelte-spa-router/wrap';
+  import { location } from 'svelte-routing';
 
-  export let params; // svelte-spa-router에서 제공하는 동적 파라미터
-
-  let jobId = params.id;
-  let jobDetail = null;
+  let job = location.state?.job || null;
   let error = null;
 
-  async function fetchJobDetail() {
+  $: jobId = location.pathname.split("/").pop();
+
+  async function fetchJobDetail(id) {
     try {
-      const response = await fetch(`http://localhost:8000/job-listings/${jobId}`);
+      const response = await fetch(`http://localhost:8000/job-listings/${id}`);
       if (!response.ok) {
         throw new Error('네트워크 응답이 실패했습니다');
       }
-      jobDetail = await response.json();
+      job = await response.json();
     } catch (err) {
       error = err.message;
     }
   }
 
-  onMount(fetchJobDetail);
+  onMount(() => {
+    if (!job) {
+      fetchJobDetail(jobId);
+    }
+  });
 </script>
 
 <main class="container">
   {#if error}
     <p class="error">{error}</p>
-  {:else if !jobDetail}
-    <p>Loading...</p>
-  {:else}
-    <div class="job-detail">
-      <h1>{jobDetail.title}</h1>
-      <p><strong>회사:</strong> {jobDetail.company}</p>
-      <p><strong>설명:</strong> {jobDetail.description}</p>
-    </div>
+  {:else if job}
+    <h1>{job.title}</h1>
+    <p><strong>회사:</strong> {job.company}</p>
+    <p><strong>설명:</strong> {job.description}</p>
   {/if}
 </main>
-
 <style>
   .container {
     max-width: 800px;
@@ -71,4 +69,4 @@
   p strong {
     color: #333;
   }
-</style>
+</style> -->

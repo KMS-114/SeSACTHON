@@ -16,8 +16,9 @@
     if (!localStorage.getItem('token')) {
         navigate('/', { replace: true });
     }
-    let loggedIn = false;
-    let currentUserType = "1";
+
+    let loggedIn = true;
+    let currentUserType = "2";
 
     // 로그인 상태 구독
     isLoggedIn.subscribe(value => {
@@ -35,7 +36,7 @@
         path,
         component,
         action: () => {
-        if (!userLoggedIn) {
+        if (!loggedIn) {
             navigate('/login'); // 로그인되지 않은 경우 로그인 페이지로 리디렉션
             }
         }
@@ -50,11 +51,13 @@
     {#if loggedIn}
         <Route path="/home" component={Home} />
         <Route path="/jobpostlist" component={JobPostList} />
-        <Route path="/jobpost" component={JobPost} />
-        <Route path="/jobdetail:id" component={JobDetail} />
-    {/if}
-    {#if currentUserType === '2'}
-        <Route path="/profile" component={UserProfile} />
+        <Route path="/jobdetail/:id" component={JobDetail} />
+        {#if currentUserType === '1'}
+            <Route path="/jobpost" component={JobPost} />
+        {/if}
+        {#if currentUserType === '2'}
+            <Route path="/profile" component={UserProfile} />
+        {/if}
     {/if}
 
 </Router>
