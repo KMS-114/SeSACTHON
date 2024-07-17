@@ -52,12 +52,12 @@
         <Route path="/home" component={Home} />
         <Route path="/jobpostlist" component={JobPostList} />
         <Route path="/jobdetail/:id" component={JobDetail} />
-        {#if currentUserType === '1'}
+        <!-- {#if currentUserType === "1"} -->
             <Route path="/jobpost" component={JobPost} />
-        {/if}
-        {#if currentUserType === '2'}
+        <!-- {/if} -->
+        <!-- {#if currentUserType === "2"} -->
             <Route path="/profile" component={UserProfile} />
-        {/if}
+        <!-- {/if} -->
     {/if}
 
 </Router>

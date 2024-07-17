@@ -1,5 +1,5 @@
 <script>
-    import { onMount } from 'svelte';
+    import { onMount, createEventDispatcher } from 'svelte';
     import { navigate } from 'svelte-routing'; // 라우터 임포트
     import Navbar from '../../components/Navbar.svelte';
     import { user, userType } from '../../lib/store';
@@ -7,6 +7,8 @@
 
     let currentUser;
     let currentUserType;
+
+    const dispatch = createEventDispatcher();
 
     user.subscribe(value => {
       currentUser = value;
@@ -48,8 +50,9 @@
   
     onMount(fetchJobListings);
 
-    function goToJobDetail(job) {
-      navigate(`/jobdetail/${job.id}`, { state: { job } });
+    function selectJob(job) {
+      dispatch('selectJob', job);
+      navigate(`/jobdetail/${job.id}`);
     }
 </script>
   <Navbar />
@@ -74,7 +77,7 @@
     {:else}
         <ul class="job-list">
         {#each filteredJobListings as job}
-            <li class="job-item" on:click={() => goToJobDetail(job)}>
+            <li class="job-item" on:click={() => selectJob(job)}>
             <h2>{job.title}</h2>
             <p><strong>회사:</strong> {job.company}</p>
             <p><strong>설명:</strong> {job.description}</p>

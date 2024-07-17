@@ -2,11 +2,11 @@
   import { onMount } from 'svelte';
   import { location } from 'svelte-routing';
 
-  let job = location.state?.job || null;
+  export let id;
+  export let job = null;
   let error = null;
 
-  $: jobId = location.pathname.split("/").pop();
-
+  // This part is used when job is not provided as a prop
   async function fetchJobDetail(id) {
     try {
       const response = await fetch(`http://localhost:8000/job-listings/${id}`);
@@ -19,9 +19,10 @@
     }
   }
 
+  // Fetch job detail if job is not passed as a prop
   onMount(() => {
     if (!job) {
-      fetchJobDetail(jobId);
+      fetchJobDetail(id);
     }
   });
 </script>
@@ -35,6 +36,8 @@
     <p><strong>설명:</strong> {job.description}</p>
   {/if}
 </main>
+
+
 <style>
   .container {
     max-width: 800px;

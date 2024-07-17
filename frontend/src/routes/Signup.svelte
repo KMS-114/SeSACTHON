@@ -6,6 +6,7 @@
     let lastName = '';
     let signUpEmail = '';
     let password = '';
+    let usergroup = '';
   
     async function signup(event) {
       event.preventDefault();
@@ -19,6 +20,7 @@
           lastName: lastName,
           email: signUpEmail,
           password: password,
+          userGroup: usergroup,
           phone: '000-0000-0000'  // Assuming you have a default phone or need to adjust this field
         }),
       });
@@ -157,6 +159,15 @@
           <input class="input" maxlength="256" name="Password-4" data-name="Password 4" placeholder=""
                   type="password" id="Password-4" bind:value={password} required />
         </div>
+        
+        <br>
+        <select bind:value={usergroup}>
+          <option value="" disabled selected>Select user type</option>
+          <option value="1">Employer</option>
+          <option value="2">Applicant</option>
+        </select>
+        <br><br>
+
         <input type="submit" class="button" value="Sign Up" />
       </form>
       <div class="faint-text">

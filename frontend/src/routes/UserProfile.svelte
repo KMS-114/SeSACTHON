@@ -4,6 +4,7 @@
 
     let name = '';
     let company = '';
+    let gender = '';
     let description = '';
     let alertMessage = '';
   
@@ -30,7 +31,13 @@
       } catch (error) {
         alertMessage = '작성 실패: 서버 오류';
       }
-}
+    }
+
+  function handleRadioChange(event) {
+    gender = event.target.value;
+    console.log("Selected gender:", gender);
+  }
+
 </script>
 
 <Navbar />
@@ -44,10 +51,20 @@
         이름:
         <input type="text" bind:value={name} required />
         </label>
-        <label>
-        회사:
-        <input type="text" bind:value={company} required />
+      <div class="radio-group">
+
+        <label>남자<input type="radio" name="gender" value="male" on:change={handleRadioChange} />
         </label>
+        <label>여자<input type="radio" name="gender" value="female" on:change={handleRadioChange} />
+        </label>
+      </div>
+
+      <label>
+        지역:
+      <input type="text" bind:value={company} required />
+      </label>
+
+
         <label>
         경력사항:
         <textarea bind:value={description} required></textarea>
@@ -57,6 +74,23 @@
 </main>
 
 <style>
+  main {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+
+  }
+  .radio-group {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    align-items: center;
+    margin-left: 320px;
+  }
+  
+  input[type="radio"] {
+    margin-right: 5px;
+  }
+
 .container {
     max-width: 800px;
     margin: 0 auto;
