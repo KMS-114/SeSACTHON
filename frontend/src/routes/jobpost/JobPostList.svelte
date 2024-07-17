@@ -1,14 +1,12 @@
 <script>
-    import { onMount, createEventDispatcher } from 'svelte';
+    import { onMount } from 'svelte';
     import { navigate } from 'svelte-routing'; // 라우터 임포트
     import Navbar from '../../components/Navbar.svelte';
     import { user, userType } from '../../lib/store';
-    
+    import JobDetail from './JobDetail.svelte';
 
     let currentUser;
     let currentUserType;
-
-    const dispatch = createEventDispatcher();
 
     user.subscribe(value => {
       currentUser = value;
@@ -51,18 +49,20 @@
     onMount(fetchJobListings);
 
     function selectJob(job) {
-      dispatch('selectJob', job);
       navigate(`/jobdetail/${job.id}`);
     }
 </script>
-  <Navbar />
+<Navbar />
 
 <main class="container">
-    <h1>채용 공고 리스트</h1>
-    {#if currentUserType=="1"}
-    <button class="btn btn-primary" on:click={() => navigate('/jobpost')}><span>공고 작성</span></button>
-    {/if}
-
+  <h1>채용 공고 리스트</h1>
+    <div class="header">
+      {#if currentUserType == "1"}
+      <div class="apply-btn-container">
+        <button class="apply-btn" on:click={() => navigate('/jobpost')}><span>공고 작성</span></button>
+      </div>
+      {/if}
+    </div>
     <div class="search-filter">
         <input type="text" placeholder="검색어 입력" bind:value={searchQuery} on:input={filterJobs} />
         <select bind:value={filterCompany} on:change={filterJobs}>
@@ -78,9 +78,9 @@
         <ul class="job-list">
         {#each filteredJobListings as job}
             <li class="job-item" on:click={() => selectJob(job)}>
-            <h2>{job.title}</h2>
-            <p><strong>회사:</strong> {job.company}</p>
-            <p><strong>설명:</strong> {job.description}</p>
+              <h2>{job.title}</h2>
+              <p><strong>회사:</strong> {job.company}</p>
+              <p><strong>설명:</strong> {job.description}</p>
             </li>
         {/each}
         </ul>
@@ -89,7 +89,12 @@
 
 <style>
   @import url('https://fonts.googleapis.com/css?family=Amatic+SC');
-
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 20px;
+  }
   .container {
     max-width: 1280px;
     margin: 0 auto;
@@ -160,21 +165,25 @@
     color: #333;
   }
 
-  .btn {
-    color:black;
-    padding: 0.5rem 1rem;
-    font-size: 20px; /* 버튼 글자 크기 변경 */
+  .apply-btn-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
   }
 
-  .btn-outline-light {
-    color: black; /* 버튼 글자 색상 변경 */
-    border-color: black; /* 버튼 테두리 색상 변경 */
+  .apply-btn {
+    align-self: flex-end; /* 버튼을 우측 끝에 정렬 */
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
   }
 
-  .btn-outline-light:hover {
-    background-color: #ffeb3b; /* hover 상태에서 버튼 배경 색상 변경 */
-    color: #333; /* hover 상태에서 버튼 글자 색상 변경 */
+  .apply-btn:hover {
+    background-color: #0056b3;
   }
-
 </style>
   
