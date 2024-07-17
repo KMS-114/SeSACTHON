@@ -1,15 +1,14 @@
-from typing import Optional
+from typing import Optional, Union
 
 from datetime import datetime
 from pydantic import BaseModel, Field
 
 from ...database import PyObjectId
-from ..job_posting.schema import CoverLetterQuestion
 from ..profile.schema import ProfileModel
 
 
 class CoverLetter(BaseModel):
-    question: CoverLetterQuestion
+    questionId: int
     answer: str
 
 
@@ -18,7 +17,6 @@ class ResumeModel(BaseModel):
     userId: str
     jobPostingId: str
 
-    profile: ProfileModel
     coverLetters: list[CoverLetter]
 
     createdAt: datetime

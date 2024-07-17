@@ -7,7 +7,7 @@ from ...database import PyObjectId
 
 
 class UserModel(BaseModel):
-    id: Optional[PyObjectId] = Field(alias='_id', default=None)
+    id: Optional[PyObjectId] = Field(alias="_id", default=None)
     userGroup: int
 
     username: str

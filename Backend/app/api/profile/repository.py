@@ -1,6 +1,8 @@
+from pymongo.collection import ReturnDocument
 
 from ...database import mongodb
 from .schema import ProfileModel, ProfileCollection
+from ..user.repository import find_user
 
 from ...utils.gpt import ChatGPTapi
 from ...utils.recording import Recording
@@ -17,17 +19,23 @@ def create_profile_document(text: str):
     answer = gpt.gpt_request()
 
 
-async def create_profile(
-    profile: ProfileModel
-) -> ProfileModel:
+async def create_profile(profile: ProfileModel):
     collection = mongodb.get_collection("profile")
-    new_profile = await collection.insert_one(
-        profile.model_dump()
-    )
-    created_profile = await collection.find_one(
-        {"_id": new_profile.inserted_id}
-    )
-    return created_profile
+    existing_profile = await collection.find_one({"userId": profile.userId})
+    print(existing_profile)
+
+    if not existing_profile:
+        new_profile = await collection.insert_one(profile.model_dump())
+        created_profile = await collection.find_one({"_id": new_profile.inserted_id})
+        print(created_profile)
+        return created_profile
+    else:
+        new_profile = await collection.find_one_and_replace(
+            {"userId": profile.userId},
+            profile.model_dump(),
+            return_document=ReturnDocument.AFTER,
+        )
+        return new_profile
 
 
 async def get_profiles():

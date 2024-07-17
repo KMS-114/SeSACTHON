@@ -3,9 +3,10 @@ fastapi
 pydantic
 uvicorn
 
-# # database
+# database
 pymongo
 motor
+passlib[bcrypt]
 
 # chat
 google-cloud-speech
