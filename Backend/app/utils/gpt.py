@@ -22,7 +22,8 @@ class ChatGPTapi:
                     "'name'은 이름을 뽑고, 'birth'는 나이나 생년월일을 통해서 XXXX-XX-XX 형태로 알려주고 나이를 알려주면 나이를 기준으로 생년 월일을 뽑아줘"
                     "2024년 기준으로 26세는 1998년생이야 이 내용을 기반으로 생년월일을 추정해야해 오늘 날짜 기준으로 해줘. 오늘은 {} 야"
                     "나이는 만나이 기준으로 하는거야"
-                    "'gender'는 남성은 1 여성은 2로 알려줘. 추가적으로 'skills'는 자격증으로 취득일과 취득자격증으로 만들고"
+                    "'gender'는 남성은 1 여성은 2로 알려줘. 추가적으로 'skills'는 자격증별로 'acquisition_date' 취득년도와 'qualification'취득자격증으로 만들고 "
+                    "리스트 형태로 만들어서 넣어줘"
                     "'careers'는 경력사항으로 시작날짜 'startDate'와 종료날짜 'endDate'로 XXXX-XX-XX 형태, "
                     "'affiliation'은 소속된 회사를 뽑고 'summary'는 소속 회사에서 했던일 간략하게 요약한 내용을 넣어줘"
                     "'careers' key 내부엔 startDate, endDate, affiliation, summary가 표함되는거야 알겠지".format(

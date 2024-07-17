@@ -1,8 +1,8 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
 from .schema import ProfileCollection, ProfileModel
-from .repository import get_profiles, create_profile
-from service import create_profile
+from .repository import get_profiles
+from .service import create_profile
 
 router = APIRouter(prefix="/profile")
 
@@ -27,3 +27,11 @@ async def profile_create_singleaudio(userId: str, file: UploadFile = File(...)):
         return JSONResponse(content={"message": "Success", "data": result})
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# @router.post("/create_test")
+# async def profile_create_test(userId: str):
+#     try:
+#         result = await create_profile_test(userId)
+#         return JSONResponse(content={"message": "Success", "data": result})
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))

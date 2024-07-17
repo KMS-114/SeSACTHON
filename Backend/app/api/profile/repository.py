@@ -1,10 +1,10 @@
+from datetime import datetime
 from typing import Optional
 
 from pymongo.collection import ReturnDocument
 
 from ...database import mongodb
 from .schema import ProfileModel, ProfileCollection
-
 collection = mongodb.get_collection("profile")
 
 # TODO: Not Completed
@@ -12,13 +12,15 @@ collection = mongodb.get_collection("profile")
 async def create_profile_document(profile_data: dict) -> Optional[ProfileModel]:
     try:
         profile = ProfileModel(**profile_data)
+        # profile.createdAt = datetime.now()
+        # profile.updatedAt = datetime.now()
         existing_profile = await collection.find_one({"userId": profile.userId})
-
         if not existing_profile:
             new_profile = await collection.insert_one(profile.model_dump())
             created_profile = await collection.find_one({"_id": new_profile.inserted_id})
             return ProfileModel(**created_profile)
         else:
+            # profile.updatedAt = datetime.strptime(existing_profile.createdAt, "%Y-%m-%d")
             new_profile = await collection.find_one_and_replace(
                 {"userId": profile.userId},
                 profile.model_dump(),
