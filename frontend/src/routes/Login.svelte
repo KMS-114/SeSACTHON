@@ -157,12 +157,12 @@
           <input class="input" maxlength="256" name="Password-4" data-name="Password 4" placeholder=""
                  type="password" bind:value={password} required />
         </div>
-        <select bind:value={userGroup}>
+        <!-- <select bind:value={userGroup}>
           <option value="" disabled selected>Select user type</option>
           <option value="1">Employer</option>
           <option value="2">Applicant</option>
         </select>
-        <br><br>
+        <br><br> -->
 
         <input type="submit" class="button" value="Log In" />
       </form>
