@@ -36,7 +36,7 @@
   onMount(() => {
     try{
       id = getIdFromPath();
-      console.log('Job ID:', id);
+      console.log('Get Job ID:', id);
       if (!job) {
         fetchJobDetail(id);
       }
@@ -45,7 +45,8 @@
     }
   });
 
-  function selectJob(job) {
+  function applyJob(job) {
+      console.log('post to apply Job ID:', job.id);
       navigate(`/applyjob/${job.id}`);
     }
 </script>
@@ -65,7 +66,7 @@
         <p><strong>게시일:</strong> {job.postedDate}</p> -->
         {#if currentUserType=="2"}
           <div class="apply-btn-container">
-            <button class="apply-btn" on:click={() => selectJob(job)}>지원하기</button>
+            <button class="apply-btn" on:click={() => applyJob(job)}>지원하기</button>
           </div>
         {/if}
       </div>
