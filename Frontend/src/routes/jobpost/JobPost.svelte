@@ -3,53 +3,70 @@
   import Navbar from '../../components/Navbar.svelte';
   import '@fortawesome/fontawesome-free/css/all.css';
 
+  let userId = '6695199d04cbd3e40f64419a'; // 필요시 실제 유저 ID로 설정
   let title = '';
   let description = '';
-  let company = '';
   
   let qualificationsRequired = {
     ageMin: '',
     ageMax: '',
-    gender: ''
-  }
-  let customQualification = {
+    gender: '',
+    customQualification: {
           affiliation: '',
           career:''
         }
+  };
     
+  let coverLetterQuestions = [];
 
-  let coverLetterQuestions = {
-    content: '',
-        username: '',
-        charLimit: '',
-        affiliation: '',
-        createdAt: '',
-        updatedAt: ''
-    };
+  let content = '';
+  let charLimit = '';
 
+  function addQuestion() {
+    coverLetterQuestions = [...coverLetterQuestions, { content: '', charLimit: 500 }];
+  }
 
   let alertMessage = '';
 
   async function handleJobPosting() {
-    const formData = new FormData();
+    const timestamp = new Date().toISOString();
+
+    const jobPostingData = {
+      userId,
+      title,
+      description,
+      qualificationsRequired,
+      coverLetterQuestions,
+      createdAt: timestamp,
+      updatedAt: timestamp
+    };
     
-    formData.append('title', title);
-    formData.append('company', company);
-    formData.append('description', description);
 
     try {
-      const response = await fetch('http://localhost:8000/job-listings/', {
+      const response = await fetch('http://localhost:8000/job_posting/create/', {
         method: 'POST',
-        body: formData
+        headers: {
+          'Content-Type': 'application/json',
+      },
+        body: JSON.stringify(jobPostingData)
       });
 
       if (response.ok) {
         alertMessage = '채용 공고가 성공적으로 작성되었습니다.';
         // Clear form fields
         title = '';
-        company = '';
         description = '';
-
+        qualificationsRequired = {
+          ageMin: '',
+          ageMax: '',
+          gender: '',
+          customQualification: {
+            affiliation: '',
+            career: ''
+          }
+        };
+        coverLetterQuestions = [];
+        
         setTimeout(() => {
           alertMessage = '';
           navigate('/'); // 변경된 경로 설정
@@ -68,22 +85,55 @@
 <Navbar />
 
 <main class="container">
-  <h1>채용 공고 작성</h1>
-  <br><br>
+  <br><br><br><br>
   {#if alertMessage}
     <div class="alert">{alertMessage}</div>
   {/if}
-  <br><br>
+  <h1>채용 공고 작성</h1>
   <form on:submit|preventDefault={handleJobPosting}>
-    <label>직책:</label>
+    <label>주제</label>
     <input type="text" bind:value={title} required />
-
-    <label>회사:</label>
-    <input type="text" bind:value={company} required />
 
     <label>설명:</label>
     <textarea bind:value={description} required></textarea>
-  
+
+    <fieldset>
+      <!-- <legend>자격 요건</legend> -->
+      <label>최소 나이:</label>
+      <input type="number" bind:value={qualificationsRequired.ageMin} required />
+
+      <label>최대 나이</label>
+      <input type="number" bind:value={qualificationsRequired.ageMax} required />
+
+      <label>성별</label>
+      <select bind:value={qualificationsRequired.gender} required>
+        <option value="" disabled selected>선택</option>
+        <option value="1">남성</option>
+        <option value="2">여성</option>
+      </select>
+
+      <label>학력</label>
+      <input type="text" bind:value={qualificationsRequired.customQualification.affiliation} required />
+
+      <label>경력</label>
+      <input type="text" bind:value={qualificationsRequired.customQualification.career} required />
+    </fieldset>
+
+    <fieldset>
+      <legend>자기소개서 질문</legend>
+      <br>
+      {#each coverLetterQuestions as question, index}
+        <div>
+          <br>
+          <label>질문 {index + 1}:</label>
+          <input type="text" bind:value={question.content} required />
+          <button type="button" on:click={() => removeQuestion(index)}>질문 삭제</button>
+        </div>
+      {/each}
+      <br>
+      <button type="button" on:click={addQuestion}>질문 추가</button>
+    </fieldset>
+    <br><br>
     <button type="submit">작성</button>
   </form>
 </main>

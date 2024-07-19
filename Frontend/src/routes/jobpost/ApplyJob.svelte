@@ -9,18 +9,26 @@
     const segments = path.split('/');
     return segments[segments.length - 1];
   }
-  let id = null;
+
+  let userId = '6695197b04cbd3e40f644197'; // 필요시 실제 유저 ID로 설정
+  let jobPostingId = null;
+  let coverLetters = [];
   let job = null;
   let error = null;
+  let alertMessage = '';
 
   // 해당 공고 정보 받아오기
   async function fetchJobDetail(id) {
     try {
-      const response = await fetch(`http://localhost:8000/job-listings/${id}`);
+      const response = await fetch(`http://localhost:8000/resume/create/`);
       if (!response.ok) {
         throw new Error('네트워크 응답이 실패했습니다');
       }
       job = await response.json();
+      if (job.coverLetterQuestions) {
+        coverLetters = job.coverLetterQuestions.map(q => ({ questionId: q.coverLetterQuestionId, answer: '' }));
+      }
+      jobPostingId = job.id;
     } catch (err) {
       error = err.message;
     }

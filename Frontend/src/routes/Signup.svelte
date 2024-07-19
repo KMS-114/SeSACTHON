@@ -8,11 +8,16 @@
     let password = '';
     let affiliation = '';
 
+    let error = null;
   
     async function signup(event) {
       event.preventDefault();
-      
-      const response = await fetch('http://localhost:8000/user/create', {
+
+      // integer로 변경
+      const userGroupInt = parseInt(usergroup, 10);
+      console.log(userGroupInt);
+      try{
+      const response = await fetch('http://localhost:8000/user/create/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -24,6 +29,7 @@
           password: password,
           affiliation: affiliation
         }),
+
       });
   
       if (response.ok) {
@@ -33,6 +39,16 @@
         console.log()
         alert('Signup failed');
       }
+    }
+    catch(err){
+      error = err.message
+      console.log(error);
+    }
+    }
+
+    function handleIntegerInput(event, index, key) {
+        const value = parseInt(event.target.value, 10);
+        userData[index][key] = isNaN(value) ? '' : value;
     }
 </script>
   
@@ -162,7 +178,7 @@
         </div>
         
         <br>
-        <select bind:value={usergroup}>
+        <select bind:value={usergroup} >
           <option value="" disabled selected>Select user type</option>
           <option value="1">Employer</option>
           <option value="2">Applicant</option>
