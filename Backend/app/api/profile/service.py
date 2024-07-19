@@ -5,13 +5,14 @@ import shutil
 from fastapi import UploadFile
 
 from .repository import create_profile_document
+from .schema import ProfileModel
 from ...utils.gpt import ChatGPTapi
 from ...utils.stt import ETRIstt
 
 stt = ETRIstt()
 
 
-async def create_profile(userId: str, file: UploadFile):
+async def refactoring_profile(userId: str, file: UploadFile):
     gpt = ChatGPTapi()
 
     file_path = save_upload_file(userId, file)
@@ -22,8 +23,10 @@ async def create_profile(userId: str, file: UploadFile):
     profile_dict = eval(profile_extract)
 
     profile_save = await convert_to_datetime(profile_dict)
-    await create_profile_document(profile_save)
+    profile_save['userId'] = userId
 
+    profile = ProfileModel(**profile_save)
+    return profile
 
 async def save_upload_file(userId: str, audio: UploadFile):
     save_path = f"../../data/uploadedFiles/{userId}"
@@ -48,18 +51,25 @@ async def convert_to_datetime(obj):
 
     return obj
 
-# async def create_profile_test(userId: str):
-#     gpt = ChatGPTapi()
-#
-#     user_answer = "안녕하세요 33세 김아무개입니다 7월 3일에 태어났어요 남자고 군대는 다녀왔어요. 저는 토익 700점이고 정처기 를 2021년에 땄어요 맞다 전기기사자격증도 18년도에 땄나 맞아요 땄어요. 파워포인트랑 엑셀자격증도 2010년에 땄어요. 그전엔 네모기업에서 대리로 개발 업무 진행했어요. 13년 5월 13일부터 17년 2월 17일까지 일했습니다. 해양관련 레이더 개발을 진행해서 해외에 수출 진행했습니다. 세모기업도 다녔었는데 세모기업 다닌기간은 18년도 1월 16일부터 딱 4년 다녔습니다. 거기서는 선박관련 레이더 개발 진행했습니다. 국책과제였어요"
-#
-#     gpt.set_messages(template_type="profile", text=user_answer)
-#     profile_extract = gpt.gpt_request()
-#     profile_dict = eval(profile_extract)
-#     # print(profile_extract)
-#     # print(profile_dict)
-#     profile_save = await convert_to_datetime(profile_dict)
-#     profile_save["createdAt"] = profile_save["updatedAt"] = datetime.now()
-#     profile_save["userId"] = userId
-#     print(profile_save)
-#     await create_profile_document(profile_save)
+async def refactoring_profile_test(userId: str):
+    gpt = ChatGPTapi()
+
+    user_answer = "안녕하세요 33세 김아무개입니다 7월 3일에 태어났어요 남자고 군대는 다녀왔어요. 저는 토익 700점이고 정처기 를 2021년에 땄어요 맞다 전기기사자격증도 18년도에 땄나 맞아요 땄어요. 파워포인트랑 엑셀자격증도 2010년에 땄어요. 그전엔 네모기업에서 대리로 개발 업무 진행했어요. 13년 5월 13일부터 17년 2월 17일까지 일했습니다. 해양관련 레이더 개발을 진행해서 해외에 수출 진행했습니다. 세모기업도 다녔었는데 세모기업 다닌기간은 18년도 1월 16일부터 딱 4년 다녔습니다. 거기서는 선박관련 레이더 개발 진행했습니다. 국책과제였어요"
+    # print(user_answer)
+    gpt.set_messages(template_type="profile", text=user_answer)
+    profile_extract = gpt.gpt_request()
+    profile_dict = eval(profile_extract)
+    profile_save = await convert_to_datetime(profile_dict)
+    profile_save['userId'] = userId
+    print(profile_save)
+    profile = ProfileModel(**profile_save)
+
+    # print(profile)
+    # await create_profile_document(profile_save)
+    return profile
+
+async def create_profile_test(profile: ProfileModel):
+    print(profile)
+    response = await create_profile_document(profile)
+    print(response)
+    return response

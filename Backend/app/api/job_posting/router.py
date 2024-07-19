@@ -2,7 +2,6 @@ from fastapi import APIRouter
 
 from .schema import JobPostingModel, JobPostingCollection, CoverLetterQuestion, QualificationRequired
 from .repository import find_all_job_postings, create_job_posting, update_cover_letter_question, update_qualification, update_description
-from ...database import collection
 from bson import ObjectId
 from ..user.repository import find_user
 

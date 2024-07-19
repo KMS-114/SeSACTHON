@@ -9,11 +9,8 @@ collection = mongodb.get_collection("profile")
 
 # TODO: Not Completed
 
-async def create_profile_document(profile_data: dict) -> Optional[ProfileModel]:
+async def create_profile_document(profile: ProfileModel):
     try:
-        profile = ProfileModel(**profile_data)
-        # profile.createdAt = datetime.now()
-        # profile.updatedAt = datetime.now()
         existing_profile = await collection.find_one({"userId": profile.userId})
         if not existing_profile:
             new_profile = await collection.insert_one(profile.model_dump())

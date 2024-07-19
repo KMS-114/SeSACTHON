@@ -1,6 +1,7 @@
 from .schema import JobPostingModel, JobPostingCollection
 from bson import ObjectId
-from ...database import mongodb, collection
+from ...database import mongodb
+collection = mongodb.get_collection("jobPosting")
 
 async def update_description(job_posting_id:str, description:str)->dict:
     job_posting = await collection.find_one({"_id": ObjectId(job_posting_id)})
