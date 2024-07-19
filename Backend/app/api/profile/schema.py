@@ -1,7 +1,8 @@
 from typing import Union
 
 from pydantic import BaseModel, Field
-from datetime import datetime
+from datetime import datetime, timezone
+
 
 class Skill(BaseModel):
     acquisition_date: str
@@ -24,8 +25,8 @@ class ProfileModel(BaseModel):
     skills: list[Skill]
     careers: list[Career]
 
-    createdAt: datetime
-    updatedAt: datetime
+    createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    updatedAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
 class ProfileCollection(BaseModel):

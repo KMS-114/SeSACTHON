@@ -1,12 +1,18 @@
 uvicorn
-fastapi
+fastapi~=0.111.0
 
 # chat
 google-cloud-speech
-urllib3
-openai
-gtts
-playsound==1.2.2
+urllib3~=2.2.2
+openai~=1.35.12
+gtts~=2.5.1
 
 # DB
 sqlalchemy
+pydantic~=2.8.2
+passlib~=1.7.4
+pymongo~=4.8.0
+google~=3.0.0
+starlette~=0.37.2
+motor~=3.5.1
+PyAudio~=0.2.14
