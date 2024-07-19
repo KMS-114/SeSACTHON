@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from .schema import ResumeModel, ResumeCollection
-from .repository import get_resumes, create_resume
+from api.resume.schema import ResumeModel, ResumeCollection
+from api.resume.repository import get_resumes, create_resume
 
 
 router = APIRouter(prefix="/resume")

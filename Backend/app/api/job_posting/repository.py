@@ -1,5 +1,5 @@
-from .schema import JobPostingModel, JobPostingCollection
-from ...database import mongodb
+from api.job_posting.schema import JobPostingModel, JobPostingCollection
+from database import mongodb
 
 
 async def create_job_posting(job_posting: JobPostingModel) -> JobPostingModel:

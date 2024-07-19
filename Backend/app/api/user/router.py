@@ -1,8 +1,8 @@
 from datetime import datetime
 from fastapi import APIRouter
 
-from .schema import UserModel, UserCollection
-from .repository import find_all_users, create_user, delete_user, find_user
+from api.user.schema import UserModel, UserCollection
+from api.user.repository import find_all_users, create_user, delete_user, find_user
 
 
 router = APIRouter(prefix="/user")

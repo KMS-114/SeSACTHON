@@ -1,8 +1,8 @@
 from fastapi import APIRouter
 
-from .schema import JobPostingModel, JobPostingCollection
-from .repository import find_all_job_postings, create_job_posting
-from ..user.repository import find_user
+from api.job_posting.schema import JobPostingModel, JobPostingCollection
+from api.job_posting.repository import find_all_job_postings, create_job_posting
+from api.user.repository import find_user
 
 
 router = APIRouter(prefix="/job_posting")

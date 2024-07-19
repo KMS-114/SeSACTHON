@@ -1,8 +1,8 @@
 from passlib.context import CryptContext
 from bson.objectid import ObjectId
 
-from .schema import UserModel, UserCollection
-from ...database import mongodb
+from api.user.schema import UserModel, UserCollection
+from database import mongodb
 
 
 pwd_contenxt = CryptContext(schemes=["bcrypt"], deprecated="auto")

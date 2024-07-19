@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 
-from .schema import ProfileCollection, ProfileModel
-from .repository import get_profiles, create_profile
+from api.profile.schema import ProfileCollection, ProfileModel
+from api.profile.repository import get_profiles, create_profile
 
 
 router = APIRouter(prefix="/profile")

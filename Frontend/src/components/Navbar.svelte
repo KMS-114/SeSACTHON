@@ -33,7 +33,7 @@
         <a href="#" class="nav-link" on:click="{() => navigate('/home')}">Home</a>
         <a href="#" class="nav-link" on:click="{() => navigate('/jobpostlist')}">채용 공고</a>
         {#if currentUserType=="1"}
-          <a href="#" class="nav-link" on:click="{() => navigate('/jobpostlist')}">나의 공고</a>
+          <a href="#" class="nav-link" on:click="{() => navigate('/myjobpostlist')}">나의 공고</a>
         {/if}
         <a href="#" class="nav-link" on:click="{() => navigate('/profile')}">프로필 작성</a>
     </ul>

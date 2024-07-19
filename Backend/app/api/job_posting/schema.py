@@ -3,8 +3,8 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
-from ...database import PyObjectId
-from ..resume.schema import ResumeCollection
+from database import PyObjectId
+from api.resume.schema import ResumeCollection
 
 
 class QualificationRequired(BaseModel):

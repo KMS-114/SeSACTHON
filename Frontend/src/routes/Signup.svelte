@@ -1,27 +1,28 @@
 <script>
     import { navigate } from 'svelte-routing';
     import { writable } from 'svelte/store';
-  
-    let firstName = '';
-    let lastName = '';
-    let signUpEmail = '';
+
+    let userid = '';
+    let usergroup;
+    let username = '';
     let password = '';
-    let usergroup = '';
+    let affiliation = '';
+
   
     async function signup(event) {
       event.preventDefault();
-      const response = await fetch('http://localhost:8000/user/signup', {
+      
+      const response = await fetch('http://localhost:8000/user/create', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          firstName: firstName,
-          lastName: lastName,
-          email: signUpEmail,
-          password: password,
+          _id: userid,
           userGroup: usergroup,
-          phone: '000-0000-0000'  // Assuming you have a default phone or need to adjust this field
+          username: username,
+          password: password,
+          affiliation: affiliation
         }),
       });
   
@@ -29,6 +30,7 @@
         alert('Signup successful');
         navigate('/login', { replace: true });
       } else {
+        console.log()
         alert('Signup failed');
       }
     }
@@ -139,25 +141,24 @@
             class="form-container" on:submit={signup}>
         <h1 class="h1-small">Create an account</h1>
         <div class="input-wrapper">
-          <label for="First-Name-4" class="input-label">First Name</label>
-          <input class="input" maxlength="256" name="First-Name-4" data-name="First Name 4"
-                  placeholder="e.g. Howard" type="text" id="First-Name-4" bind:value={firstName} required />
+          <label for="First-Name-4" class="input-label">아이디</label>
+          <input class="input" maxlength="256"
+                  type="text" bind:value={userid} required />
         </div>
         <div class="input-wrapper">
-          <label for="Last-Name-4" class="input-label">Last Name</label>
-          <input class="input" maxlength="256" name="Last-Name-4" data-name="Last Name 4"
-                  placeholder="e.g. Thurman" type="text" id="Last-Name-4" bind:value={lastName} required />
+          <label for="Last-Name-4" class="input-label">이름</label>
+          <input class="input" maxlength="256" placeholder="e.g. Hong Gil Dong"
+                 type="text"  bind:value={username} required />
         </div>
         <div class="input-wrapper">
-          <label for="Email-5" class="input-label">Email</label>
-          <input class="input" maxlength="256" name="Email-5" data-name="Email 5"
-                  placeholder="e.g. howard.thurman@gmail.com" type="email" id="Email-5" bind:value={signUpEmail}
-                  required />
+          <label for="Password-4" class="input-label">비밀번호</label>
+          <input class="input" maxlength="256" 
+                  type="password" bind:value={password} required />
         </div>
         <div class="input-wrapper">
-          <label for="Password-4" class="input-label">Password</label>
-          <input class="input" maxlength="256" name="Password-4" data-name="Password 4" placeholder=""
-                  type="password" id="Password-4" bind:value={password} required />
+          <label for="Last-Name-4" class="input-label">Affiliation</label>
+          <input class="input" maxlength="256" 
+                 type="text" bind:value={affiliation} required />
         </div>
         
         <br>

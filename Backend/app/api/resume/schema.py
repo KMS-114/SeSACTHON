@@ -3,8 +3,8 @@ from typing import Optional, Union
 from datetime import datetime
 from pydantic import BaseModel, Field
 
-from ...database import PyObjectId
-from ..profile.schema import ProfileModel
+from database import PyObjectId
+from api.profile.schema import ProfileModel
 
 
 class CoverLetter(BaseModel):

@@ -3,7 +3,7 @@ from datetime import datetime
 
 from pydantic import BaseModel, Field
 
-from ...database import PyObjectId
+from database import PyObjectId
 
 
 class UserModel(BaseModel):

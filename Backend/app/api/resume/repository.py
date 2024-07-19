@@ -1,9 +1,9 @@
 from bson.objectid import ObjectId
 
-from ...database import mongodb
-from .schema import ResumeModel, ResumeCollection
+from database import mongodb
+from api.resume.schema import ResumeModel, ResumeCollection
 
-from ..job_posting.schema import JobPostingModel
+from api.job_posting.schema import JobPostingModel
 
 
 async def create_resume(resume: ResumeModel) -> ResumeModel:

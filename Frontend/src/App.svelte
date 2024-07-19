@@ -9,7 +9,7 @@
     import JobDetail from './routes/jobpost/JobDetail.svelte';
     import UserProfile from './routes/UserProfile.svelte';
     import ApplyJob from './routes/jobpost/ApplyJob.svelte';
-
+    import MyJobPostList from'./routes/jobpost/MyJobPostList.svelte'
     import { isLoggedIn, userType } from './lib/store';
 
 
@@ -53,6 +53,8 @@
         <Route path="/home" component={Home} />
         <Route path="/jobpostlist" component={JobPostList} />
         <Route path="/jobdetail/:id" component={JobDetail} />
+
+        <Route path="/myjobpostlist" component={MyJobPostList} />
         <!-- {#if currentUserType === "1"} -->
             <Route path="/jobpost" component={JobPost} />
         <!-- {/if} -->

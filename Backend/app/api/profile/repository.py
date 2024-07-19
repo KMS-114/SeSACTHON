@@ -1,12 +1,12 @@
 from pymongo.collection import ReturnDocument
 
-from ...database import mongodb
-from .schema import ProfileModel, ProfileCollection
-from ..user.repository import find_user
+from database import mongodb
+from api.profile.schema import ProfileModel, ProfileCollection
+from api.user.repository import find_user
 
-from ...utils.gpt import ChatGPTapi
-from ...utils.recording import Recording
-from ...utils.stt import OpenAIstt, ETRIstt, Googlestt
+from utils.gpt import ChatGPTapi
+from utils.recording import Recording
+from utils.stt import OpenAIstt, ETRIstt, Googlestt
 
 
 # TODO: Not Completed

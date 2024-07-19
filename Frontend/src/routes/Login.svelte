@@ -1,31 +1,32 @@
 <script>
   import { navigate } from 'svelte-routing';
   import { writable } from 'svelte/store';
-  import { isLoggedIn, user } from '../lib/store';
+  import { isLoggedIn, user, userType } from '../lib/store';
 
-  let email = '';
+  let userid = '';
   let password = '';
-  let userGroup = ''; // 사용자 유형 선택
 
   async function login(event) {
     event.preventDefault();
-    const response = await fetch('http://localhost:8000/login', {
+    const response = await fetch('http://localhost:8000/user/get/${userid}', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        'username': email,
+        '_id': userid,
         'password': password,
       }),
     });
 
     if (response.ok) {
       const data = await response.json();
+
       isLoggedIn.set(true);
-      user.set({ email });
+      user.set({ userid });
       userType.set(userGroup);
       localStorage.setItem('token', data.access_token);
+
       alert('Login successful');
       if (userGroup === '1') {
         navigate('/home', { replace: true });
@@ -148,13 +149,13 @@
             class="form-container" on:submit={login}>
         <h1 class="h1-small">Login</h1>
         <div class="input-wrapper">
-          <label for="Email-5" class="input-label">Email</label>
-          <input class="input" maxlength="256" name="Email-5" data-name="Email 5"
-                 placeholder="e.g. howard.thurman@gmail.com" type="email" bind:value={email} required />
+          <label for="Password-4" class="input-label">아이디</label>
+          <input class="input" maxlength="256" 
+                 type="text" bind:value={userid} required />
         </div>
         <div class="input-wrapper">
-          <label for="Password-4" class="input-label">Password</label>
-          <input class="input" maxlength="256" name="Password-4" data-name="Password 4" placeholder=""
+          <label for="Password-4" class="input-label">비밀번호</label>
+          <input class="input" maxlength="256"
                  type="password" bind:value={password} required />
         </div>
         <!-- <select bind:value={userGroup}>
