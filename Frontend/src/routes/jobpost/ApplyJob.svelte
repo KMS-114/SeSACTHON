@@ -15,7 +15,7 @@
   let coverLetters = [];
   let job = null;
   let error = null;
-  let alertMessage = '';
+  // let alertMessage = '';
 
   // 해당 공고 정보 받아오기
   async function fetchJobDetail(id) {

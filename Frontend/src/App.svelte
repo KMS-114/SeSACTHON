@@ -61,7 +61,7 @@
         <!-- {#if currentUserType === "2"} -->
             <Route path="/profile" component={UserProfile} />
         <!-- {/if} -->
-        <Route path="/applyjob/:id" component={ApplyJob} />
+        <!-- <Route path="/applyjob/:id" component={ApplyJob} /> -->
     {/if}
 
 </Router>
