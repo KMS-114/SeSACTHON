@@ -1,8 +1,9 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
+from typing import Optional
 from .schema import ProfileCollection, ProfileModel
 from .repository import get_profiles, create_profile_document
-from .service import refactoring_profile, refactoring_profile_test, create_profile_test
+from .service import refactoring_profile_with_mp3, refactoring_profile_with_text, refactoring_profile_test, create_profile_test
 
 router = APIRouter(prefix="/profile")
 
@@ -20,10 +21,18 @@ async def list_profiles():
 # async def profile_create(profile: ProfileModel):
 #     return await create_profile(profile)
 
-@router.get("/create")
-async def profile_create_singleaudio(userId: str, file: UploadFile = File(...)):
+@router.post("/send_mp3")
+async def profile_create_singeaudio(username: str, file: UploadFile = File(...)):
     try:
-        generate_profile = refactoring_profile(userId, file)
+        generate_profile = await refactoring_profile_with_mp3(username, file)
+        return generate_profile
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    
+@router.post("/send_text")
+async def profile_create_singletext(username: str, content: str):
+    try:
+        generate_profile = await refactoring_profile_with_text(username, content)
         return generate_profile
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
@@ -39,9 +48,9 @@ async def profile_save(profile: ProfileModel):
         raise HTTPException(status_code=500, detail=str(e))
 
 @router.get("/create_test")
-async def profile_create_test(userId: str):
+async def profile_create_test(username: str):
     try:
-        result = await refactoring_profile_test(userId)
+        result = await refactoring_profile_test(username)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

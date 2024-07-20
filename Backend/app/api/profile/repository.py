@@ -11,7 +11,7 @@ collection = mongodb.get_collection("profile")
 
 async def create_profile_document(profile: ProfileModel):
     try:
-        existing_profile = await collection.find_one({"userId": profile.userId})
+        existing_profile = await collection.find_one({"username": profile.username})
         if not existing_profile:
             new_profile = await collection.insert_one(profile.model_dump())
             created_profile = await collection.find_one({"_id": new_profile.inserted_id})
@@ -19,7 +19,7 @@ async def create_profile_document(profile: ProfileModel):
         else:
             # profile.updatedAt = datetime.strptime(existing_profile.createdAt, "%Y-%m-%d")
             new_profile = await collection.find_one_and_replace(
-                {"userId": profile.userId},
+                {"username": profile.username},
                 profile.model_dump(),
                 return_document=ReturnDocument.AFTER,
             )
@@ -30,7 +30,7 @@ async def create_profile_document(profile: ProfileModel):
         return None
 
 async def create_profile(profile: ProfileModel):
-    existing_profile = await collection.find_one({"userId": profile.userId})
+    existing_profile = await collection.find_one({"username": profile.username})
     print(existing_profile)
 
     if not existing_profile:
@@ -40,15 +40,15 @@ async def create_profile(profile: ProfileModel):
         return created_profile
     else:
         new_profile = await collection.find_one_and_replace(
-            {"userId": profile.userId},
+            {"username": profile.username},
             profile.model_dump(),
             return_document=ReturnDocument.AFTER,
         )
         return new_profile
 
 
-async def get_profile(userId: str) -> ProfileModel:
-    profile_data = collection.find_one({"userId": userId})
+async def get_profile(username: str) -> ProfileModel:
+    profile_data = collection.find_one({"username": username})
     if profile_data:
         return ProfileModel(**profile_data)
 

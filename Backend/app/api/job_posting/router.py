@@ -38,6 +38,6 @@ async def job_posting_create(job_posting: JobPostingModel):
     user_name = job_posting.username
     user = await find_user(user_name)
     user_group = user.userGroup
-    if user_group == 2:
+    if user_group == 1:
         # 작성자가 고용주인지 확인
         return await create_job_posting(job_posting)
