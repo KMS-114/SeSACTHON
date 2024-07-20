@@ -38,5 +38,3 @@ async def login(email: str = Form(), password: str = Form()):
 @app.get("/hello")
 def hello():
     return {"message": "hello world"}
-
-

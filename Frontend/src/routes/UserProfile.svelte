@@ -1,15 +1,25 @@
 <script>
   import { navigate } from 'svelte-routing';
   import Navbar from '../components/Navbar.svelte';
+  import { user, userType } from '../lib/store';
 
 
-  let userId = '6695197b04cbd3e40f644197'; // 필요시 실제 유저 ID로 설정
+  let currentUser; // 필요시 실제 유저 ID로 설정
+  let currentUserType;
   let name = '';
   let birth = '';
   let gender = '';
   let skills = [];
   let careers = [];
   let alertMessage = '';
+
+  user.subscribe(value => {
+    currentUser = value;
+  });
+
+  userType.subscribe(value => {
+    currentUserType = value;
+  });
 
   // 기술 리스트에 추가 및 삭제
   function addSkill() {
@@ -33,37 +43,42 @@
       const timestamp = new Date().toISOString();
 
       const profileData = {
-          userId,
-          name,
-          birth,
+          username: currentUser,
+          name: name,
+          birth: birth,
           gender: parseInt(gender, 10),
-          skills,
-          careers,
+          skills: skills,
+          careers: careers,
           createdAt: timestamp,
           updatedAt: timestamp
       };
-
+      
       try {
-          const response = await fetch('http://localhost:8000/profile/create/', {
+          const response = await fetch('http://localhost:8000/profile/save', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json'
               },
               body: JSON.stringify(profileData)
           });
-          if (response.ok) {
-              alertMessage = '프로필이 성공적으로 작성되었습니다.';
-              // Clear form fields
-              name = '';
-              birth = '';
-              gender = '';
-              skills = [];
-              careers = [];
 
-              setTimeout(() => {
-                  alertMessage = '';
-                  navigate('/home');
-              }, 2000); // 2초 후에 홈 페이지로 이동
+          console.log(profileData);
+
+          if (response.ok) {
+            console.log('success');
+
+            alertMessage = '프로필이 성공적으로 작성되었습니다.';
+            // Clear form fields
+            name = '';
+            birth = '';
+            gender = '';
+            skills = [];
+            careers = [];
+
+            setTimeout(() => {
+                alertMessage = '';
+                navigate('/home');
+            }, 2000); // 2초 후에 홈 페이지로 이동
           } else {
               const result = await response.json();
               alertMessage = `작성 실패: ${result.detail}`;
@@ -72,6 +87,7 @@
           alertMessage = `작성 실패: 서버 오류 - ${error.message}`;
       }
   }
+
   function handleRadioChange(event) {
     gender = event.target.value;
     console.log("Selected gender:", gender);
@@ -96,9 +112,9 @@
         </label>
 
         <div class="radio-group">
-          <label>남자<input type="radio" name="gender" value="male" on:change={handleRadioChange} />
+          <label>남자<input type="radio" name="gender" value=1 on:change={handleRadioChange} />
           </label>
-          <label>여자<input type="radio" name="gender" value="female" on:change={handleRadioChange} />
+          <label>여자<input type="radio" name="gender" value=2 on:change={handleRadioChange} />
           </label>
         </div>
 

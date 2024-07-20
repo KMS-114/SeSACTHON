@@ -1,25 +1,25 @@
 from _datetime import datetime
 import os
 import shutil
+from typing import Union
 
 from fastapi import UploadFile
 
-from .repository import create
+from .repository import create_profile_document
 from .schema import ProfileModel
 from ...utils.gpt import ChatGPTapi
 from ...utils.stt import ETRIstt
-from ...utils.utils import save_upload_file, delete_upload_file
 
 stt = ETRIstt()
 
 
-async def generate_profile(username: str, file: UploadFile):
+async def refactoring_profile_with_mp3(username: str, file:UploadFile):
     gpt = ChatGPTapi()
 
-    file_path = save_upload_file(username, file, type="profile")
+    file_path = await save_upload_file(username, file)
     user_answer = stt.run_stt(file_path)
 
-    gpt.set_messages(template_type="profile", answer=user_answer)
+    gpt.set_messages(template_type="profile", text=user_answer)
     profile_extract = gpt.gpt_request()
     profile_dict = eval(profile_extract)
 
@@ -27,9 +27,32 @@ async def generate_profile(username: str, file: UploadFile):
     profile_save['username'] = username
 
     profile = ProfileModel(**profile_save)
-    if profile is not None:
-        await delete_upload_file(str(file_path))
     return profile
+
+async def refactoring_profile_with_text(username: str, content:str):
+    gpt = ChatGPTapi()
+
+    # file_path = await save_upload_file(username, file)
+    # user_answer = stt.run_stt(file_path)
+
+    gpt.set_messages(template_type="profile", text=content)
+    profile_extract = gpt.gpt_request()
+    profile_dict = eval(profile_extract)
+
+    profile_save = await convert_to_datetime(profile_dict)
+    profile_save['username'] = username
+
+    profile = ProfileModel(**profile_save)
+    return profile
+
+async def save_upload_file(username: str, audio: UploadFile):
+    save_path = f"../../data/uploadedFiles/{username}"
+    os.makedirs(save_path, exist_ok=True)
+
+    file_path = os.path.join(save_path, audio.filename)
+    with open(file_path, "wb") as file_object:
+        shutil.copyfileobj(audio.file, file_object)
+    return file_path
 
 
 async def convert_to_datetime(obj):
@@ -64,6 +87,6 @@ async def refactoring_profile_test(username: str):
 
 async def create_profile_test(profile: ProfileModel):
     print(profile)
-    response = await create(profile)
+    response = await create_profile_document(profile)
     print(response)
     return response

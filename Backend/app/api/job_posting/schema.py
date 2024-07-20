@@ -22,7 +22,7 @@ class CoverLetterQuestion(BaseModel):
 
 class JobPostingModel(BaseModel):
     id: Optional[PyObjectId] = Field(alias="_id", default=None)
-    userId: str
+    username: str   # pk처럼 사용
     title: str
     description: str
 

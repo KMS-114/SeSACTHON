@@ -1,5 +1,3 @@
-from typing import Optional
-
 from openai import OpenAI
 from datetime import datetime
 
@@ -14,7 +12,7 @@ class ChatGPTapi:
         self.prompt = ""
         self.messages = []
 
-    def set_messages(self, template_type: str, question: Optional[str], answer: str):
+    def set_messages(self, template_type: str, text: str):
         if template_type in "profile":
             self.template = {
                 "role": "system",
@@ -39,29 +37,14 @@ class ChatGPTapi:
                     "아래의 줄글에서 위의 내용들을 뽑아줄래? "
                     "무조건 아래 자기소개 기반으로 답변을 만들어내야해 다른 답변 없이 "
                     "딱 파이선 딕셔너리 형태의 문자열로만 반환해줘 다른 말은 필요없어 \n\n {}".format(
-                        answer
+                        text
                     )
                 ),
             }
 
-        elif template_type == "resume":
-            self.template = {
-                "role": "system",
-                "content": (
-                    f"넌 한국인이야. 지금 너가 하는 일은 자소서를 잘 정리하고 만들어서 자소서를 작성해주는 역할을 할거야."
-                    f"너는 아래 주어진 글에서 {question}의 의도에 잘 맞게 답변을 생성해줘야해. "
-                    f"누가봐도 합격할만하게 자소서를 정리, 만들어주는데 절대로 진짜 절대로 거짓말을 섞거나 글과 다른 내용을 작성하면 안돼"
-                    f"거짓 내용은 절대 안되고 아래의 글 기반으로 만들어야해."
-                ),
-            }
-            self.prompt = {
-                "role": "user",
-                "content": (
-                    f"아래의 줄글에서 자소서 문항에 대한 답변을 만들어줄래? "
-                    f"무조건 아래 자기소개 기반으로 답변을 만들어내야해 다른 답변 없이 "
-                    f"딱 문자열로만 반환해줘 다른 말은 필요없어 \n\n {answer}"
-                ),
-            }
+        elif template_type == "Resume":
+            self.template = "" ""
+
     def gpt_request(self, history=None):
         self.messages = []
 
@@ -72,10 +55,11 @@ class ChatGPTapi:
 
         response = self.client.chat.completions.create(
             model=self.model,
+            # response_format={"type": "json_object"},
             messages=self.messages,
         )
-        gpt_answer = response.choices[0].message.content
-        return gpt_answer
+        answer = response.choices[0].message.content
+        return answer
 
 
 
