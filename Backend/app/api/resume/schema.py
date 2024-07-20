@@ -14,7 +14,7 @@ class CoverLetter(BaseModel):
 
 class ResumeModel(BaseModel):
     id: Optional[PyObjectId] = Field(alias="_id", default=None)
-    userId: str
+    username: str       # PK처럼 사용
     jobPostingId: str
 
     coverLetters: list[CoverLetter]

@@ -7,7 +7,6 @@ from ..job_posting.schema import JobPostingModel
 
 collection = mongodb.get_collection("resume")
 
-
 async def create_resume(resume: ResumeModel) -> ResumeModel:
     collection_job = mongodb.get_collection("jobPosting")
     job_posting = await collection_job.find_one({"_id": ObjectId(resume.jobPostingId)})
