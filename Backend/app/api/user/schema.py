@@ -10,7 +10,7 @@ class UserModel(BaseModel):
     id: Optional[PyObjectId] = Field(alias="_id", default=None)
     userGroup: int
 
-    username: str
+    username: str       # PK처럼 사용
     password: str
     affiliation: str
 
