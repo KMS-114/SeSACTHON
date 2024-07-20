@@ -16,7 +16,7 @@ class Career(BaseModel):
 
 
 class ProfileModel(BaseModel):
-    userId: str
+    username: str
 
     name: str
     birth: datetime
