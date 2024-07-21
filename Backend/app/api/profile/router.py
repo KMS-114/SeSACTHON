@@ -1,6 +1,8 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
+from typing import Optional
 from .schema import ProfileCollection, ProfileModel
+
 from .repository import get_all, create, get, delete, update
 from .service import generate_profile, refactoring_profile_test, create_profile_test
 

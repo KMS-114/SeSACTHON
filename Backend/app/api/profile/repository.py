@@ -20,6 +20,7 @@ async def create(profile: ProfileModel):
             return ProfileModel(**created_profile)
         else:
             # profile.updatedAt = datetime.strptime(existing_profile.createdAt, "%Y-%m-%d")
+
             new_profile = await collection.find_one_and_update(
                 {"userId": profile.username},
                 {"$set": profile.model_dump()},
@@ -30,6 +31,7 @@ async def create(profile: ProfileModel):
     except Exception as e:
         print(f"Error creating profile: {e}")
         return None
+
 
 async def update(profile: ProfileModel):
     try:
