@@ -53,7 +53,8 @@ async def update(profile: ProfileModel):
 
 async def get(username: str):
     try:
-        profile_data = collection.find_one({"username": username})
+        profile_data = await collection.find_one({"username": username})
+        print(f"profile_data: {profile_data}")
         if profile_data:
             return ProfileModel(**profile_data)
         else:
