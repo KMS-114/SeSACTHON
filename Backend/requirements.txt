@@ -1,0 +1,17 @@
+# fastapi
+fastapi
+pydantic
+uvicorn
+
+# database
+pymongo
+motor
+passlib[bcrypt]
+
+# chat
+google-cloud-speech
+urllib3
+openai
+gtts
+playsound==1.2.2
+
