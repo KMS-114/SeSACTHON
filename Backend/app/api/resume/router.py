@@ -4,7 +4,7 @@ from .schema import ResumeModel, ResumeCollection
 from .repository import get, create, get_all, delete, update
 from .service import generate_resume
 from fastapi.responses import JSONResponse, FileResponse
-
+from typing import List
 
 import subprocess
 import shutil
