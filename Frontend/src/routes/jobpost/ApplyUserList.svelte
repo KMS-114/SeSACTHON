@@ -103,7 +103,11 @@
       return matchesUser;
     });
   }
-  
+
+  function Interview() {
+      // console.log('post to apply Job ID:', id);
+      // navigate(`/applyjob/${id}`);
+    }
 </script>
 
 <Navbar />
@@ -112,10 +116,10 @@
   {#if error}
     <p class="error">{error}</p>
   {:else}
+  <div class="one">
+    <h1>채용 공고 설명</h1>
+  </div>
     <div class="job-detail">
-      <div class="one">
-        <h1>채용 공고 설명</h1>
-      </div>
       <h2>{title}</h2>
       <p><strong>설명 : </strong> {description}</p>
       <p><strong>최소 나이 : </strong> {ageMin}  
@@ -134,7 +138,7 @@
         <li class="job-item">
           <h2>{resume.username}</h2>
           <div class="apply-btn-container">
-            <button class="apply-btn" on:click={() => applyJob()}>가상 면접</button>
+            <button class="apply-btn" on:click={() => Interview()}>가상 면접</button>
           </div>
         </li>
       {/each}

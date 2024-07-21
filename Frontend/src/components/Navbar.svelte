@@ -35,7 +35,11 @@
         {#if currentUserType=="1"}
           <a href="#" class="nav-link" on:click="{() => navigate('/myjobpostlist')}">나의 공고</a>
         {/if}
-        <a href="#" class="nav-link" on:click="{() => navigate('/profile')}">프로필 작성</a>
+        {#if currentUserType=="2"}
+          <a href="#" class="nav-link" on:click="{() => navigate('/myresume')}">나의 이력서</a>
+          <a href="#" class="nav-link" on:click="{() => navigate('/profile')}">프로필 작성</a>
+        {/if}
+        <a href="#" class="nav-link" on:click="{() => navigate('/myInfo')}">나의 정보</a>
     </ul>
     <div class="button-group">
       {#if loggedIn}
