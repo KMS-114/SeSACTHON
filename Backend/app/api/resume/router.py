@@ -4,7 +4,7 @@ from .schema import ResumeModel, ResumeCollection
 from .repository import get, create, get_all, delete, update
 from .service import generate_resume
 from fastapi.responses import JSONResponse, FileResponse
-
+from typing import List
 
 import subprocess
 import shutil
@@ -53,7 +53,7 @@ async def resume_create(resume: ResumeModel):
     return result
 
 @router.post("/generate")
-async def resume_generate(username: str = Form(...), question: list[str] = Form(...), file: UploadFile = File(...)):
+async def resume_generate(username: str = Form(...), question: List[str] = Form(...), file: UploadFile = File(...)):
     try:
         generate_answer = await generate_resume(username=username, question=question, file=file)
         return generate_answer
