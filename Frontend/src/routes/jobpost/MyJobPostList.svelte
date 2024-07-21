@@ -8,76 +8,78 @@
   let currentUser;
   let currentUserType;
 
-  user.subscribe(value => {
-    currentUser = value;
-  });
-
-  userType.subscribe(value => {
-    currentUserType = value;
-  });
-
   let jobListings = [];
   let filteredJobListings = [];
   let error = null;
-  let searchQuery = '';
-  let filterCompany = '';
 
   async function fetchJobListings() {
     try {
-      const response = await fetch('http://localhost:8000/job-listings');
+      const response = await fetch('http://localhost:8000/job_posting/all/');
       if (!response.ok) {
         throw new Error('네트워크 응답이 실패했습니다');
       }
-      jobListings = await response.json();
-      filteredJobListings = jobListings;
+      const data = await response.json();
+      // console.log(data)
+      if (!Array.isArray(data.jobPostings)) {
+        throw new Error('API 응답이 배열이 아닙니다.');
+      }
+      jobListings = data.jobPostings;
+      filterJobs();
+      console.log('user : ', currentUser);
+      console.log('job', filteredJobListings);
     } catch (err) {
       error = err.message;
     }
   }
-
   function filterJobs() {
-    const query = searchQuery.toLowerCase();
-    const company = filterCompany.toLowerCase();
-
     filteredJobListings = jobListings.filter(job => {
-      const matchesQuery = job.title.toLowerCase().includes(query) || job.description.toLowerCase().includes(query);
-      const matchesCompany = company ? job.company.toLowerCase() === company : true;
-      return matchesQuery && matchesCompany;
+      const matchesUser = job.username === currentUser;
+      console.log(`Job username: ${job.username}, Current userID: ${currentUser}, Matches: ${matchesUser}`);
+      return matchesUser;
     });
   }
 
-  onMount(fetchJobListings);
+  onMount(() => {
+    try{
+        // user 스토어 구독
+      user.subscribe(value => {
+        currentUser = value;
+      });
+
+      // userType 스토어 구독
+      userType.subscribe(value => {
+        currentUserType = value;
+      });
+
+      fetchJobListings();
+
+    } catch (err) {
+      error = err.message;
+      console.log(error);
+    }
+  });
 
   function selectJob(job) {
-    navigate(`/jobdetail/${job.id}`);
+      navigate(`/applyuserlist/${job.id}`);
   }
 </script>
 <Navbar />
 
 <main class="container">
-<h1>채용 공고 리스트</h1>
-  <div class="search-filter">
-      <input type="text" placeholder="검색어 입력" bind:value={searchQuery} on:input={filterJobs} />
-      <select bind:value={filterCompany} on:change={filterJobs}>
-      <option value="">모든 회사</option>
-      {#each [...new Set(jobListings.map(job => job.company))] as company}
-          <option value={company}>{company}</option>
-      {/each}
-      </select>
-  </div>
-  {#if error}
-      <p class="error">{error}</p>
-  {:else}
-      <ul class="job-list">
-      {#each filteredJobListings as job}
-          <li class="job-item" on:click={() => selectJob(job)}>
-            <h2>{job.title}</h2>
-            <p><strong>회사:</strong> {job.company}</p>
-            <p><strong>설명:</strong> {job.description}</p>
-          </li>
-      {/each}
-      </ul>
-  {/if}
+<br><br><br><br>
+<h1>나의 채용 공고들</h1>
+{#if error}
+  <p class="error">{error}</p>
+{:else}
+  <ul class="job-list">
+    {#each filteredJobListings as job}
+      <li class="job-item" on:click={() => selectJob(job)}>
+        <h2>{job.title}</h2>
+        <p><strong>설명:</strong> {job.description}</p>
+      </li>
+    {/each}
+  </ul>
+{/if}
 </main>
 
 <style>
