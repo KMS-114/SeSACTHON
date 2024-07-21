@@ -4,6 +4,8 @@
   import Navbar from '../../components/Navbar.svelte';
   import { userType } from '../../lib/store';
 
+  const timestamp = new Date().toISOString();
+
   let currentUserType;
 
   userType.subscribe(value => {
@@ -19,16 +21,38 @@
   let job = null;
   let error = null;
 
+  let title = '';
+  let description = '';
+  let ageMin = 0;
+  let ageMax = 0;
+  let additionalProp1 = '';
+  let additionalProp2 = '';
+  let additionalProp3 = '';
+
+  let createdAt = timestamp;
+
   // This part is used when job is not provided as a prop
   async function fetchJobDetail(id) {
     try {
-      const response = await fetch(`http://localhost:8000/job-listings/${id}`);
+      const response = await fetch(`http://localhost:8000/job_posting/detail/${id}`);
       if (!response.ok) {
         throw new Error('네트워크 응답이 실패했습니다');
       }
       job = await response.json();
+      console.log('job ',job);
+      title = job.title;
+      description = job.description;
+      ageMin = job.qualificationsRequired.ageMin;
+      ageMax = job.qualificationsRequired.ageMax;
+      createdAt = job.createdAt;
+      additionalProp1 = job.qualificationsRequired.customQualification.additionalProp1;
+      additionalProp2 = job.qualificationsRequired.customQualification.additionalProp2;
+      additionalProp3 = job.qualificationsRequired.customQualification.additionalProp3;
+      console.log('job title',title);
+
     } catch (err) {
       error = err.message;
+      console.log(error);
     }
   }
 
@@ -36,41 +60,43 @@
   onMount(() => {
     try{
       id = getIdFromPath();
-      console.log('Get Job ID:', id);
-      if (!job) {
+      if (id != null) {
+        console.log('Get Job ID:', id);
+
         fetchJobDetail(id);
       }
     } catch (err) {
       error = err.message;
+      console.log(error);
     }
   });
 
-  function applyJob(job) {
-      console.log('post to apply Job ID:', job.id);
-      navigate(`/applyjob/${job.id}`);
+  function applyJob() {
+      console.log('post to apply Job ID:', id);
+      navigate(`/applyjob/${id}`);
     }
 </script>
 
 <Navbar />
+
 <main class="container">
   {#if error}
     <p class="error">{error}</p>
   {:else}
-    {#if job}
-      <div class="job-detail">
-        <h1>{job.title}</h1>
-        <p><strong>회사:</strong> {job.company}</p>
-        <p><strong>설명:</strong> {job.description}</p>
-        <!-- <p><strong>위치:</strong> {job.location}</p>
-        <p><strong>급여:</strong> {job.salary}</p>
-        <p><strong>게시일:</strong> {job.postedDate}</p> -->
-        {#if currentUserType=="2"}
-          <div class="apply-btn-container">
-            <button class="apply-btn" on:click={() => applyJob(job)}>지원하기</button>
-          </div>
-        {/if}
-      </div>
-    {/if}
+    <div class="job-detail">
+      <h2>{title}</h2>
+      <p><strong>설명 : </strong> {description}</p>
+      <p><strong>최소 나이 : </strong> {ageMin}  
+        <strong>최대 나이 : </strong> {ageMax} </p>
+      <p><strong>자격증 : </strong> {additionalProp1}, {additionalProp2}, {additionalProp3}</p>
+      <p><strong>작성일 : </strong> {createdAt}</p>
+
+      {#if currentUserType=="2"}
+        <div class="apply-btn-container">
+          <button class="apply-btn" on:click={() => applyJob()}>지원하기</button>
+        </div>
+      {/if}
+    </div>
   {/if}
 </main>
 

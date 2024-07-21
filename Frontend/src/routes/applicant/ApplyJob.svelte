@@ -175,6 +175,9 @@
   let mediaRecorder;
   let recordedChunks = [];
   let isTotalRecording = false;
+  let webm_record_name = '';
+  let mp3_record_name = '';
+
 
   async function totalRecording() {
     try {
@@ -218,7 +221,9 @@
 
   async function convertToMP3(blob) {
     const formData = new FormData();
-    formData.append('file', blob, 'recording.webm');
+    webm_record_name = `${currentUser}_${jobid}.webm`;
+    // formData.append('file', blob, 'recording.webm');
+    formData.append('file', blob, webm_record_name);
 
     try {
       const response = await fetch('http://localhost:8000/profile/get_webm', {
@@ -240,7 +245,9 @@
   async function uploadMP3() {
     if (mp3Blob) {
       const formData = new FormData();
-      formData.append('file', mp3Blob, 'recording.mp3');
+      mp3_record_name = `${currentUser}_${jobid}.mp3`;
+      // formData.append('file', mp3Blob, 'recording.mp3');
+      formData.append('file', mp3Blob, mp3_record_name);
       formData.append('username', currentUser);
 
       try {

@@ -23,14 +23,15 @@ async def find_all_users():
     return UserCollection(users=list_users)
 
 
-async def find_user(user_id):
-    user = await collection.find_one({"_id": ObjectId(user_id)})
+async def find_user(username):
+    # user = await collection.find_one({"_id": ObjectId(user_id)})
+    user = await collection.find_one({"username": username})
     user = UserModel(**user)
     return user
 
 
-async def delete_user(user_id):
-    dropped_user = await find_user(user_id)
+async def delete_user(username):
+    dropped_user = await find_user(username)
     if dropped_user:
-        result = await collection.delete_one({"_id": ObjectId(user_id)})
+        result = await collection.delete_one({"username": username})
     return dropped_user

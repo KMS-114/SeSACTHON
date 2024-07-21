@@ -1,11 +1,19 @@
 from fastapi import APIRouter, UploadFile, File, HTTPException
-from fastapi.responses import JSONResponse
+from fastapi.responses import JSONResponse, FileResponse
+from typing import Optional
 from .schema import ProfileCollection, ProfileModel
-from .repository import get_all, create, get, delete, update
-from .service import generate_profile, refactoring_profile_test, create_profile_test
+from .repository import get_profiles, create_profile_document
+from .service import refactoring_profile_with_mp3, refactoring_profile_with_text, refactoring_profile_test, create_profile_test
+
+import subprocess
+import shutil
+from pathlib import Path
+
 
 router = APIRouter(prefix="/profile")
 
+TEMP_DIR = Path("temp")
+TEMP_DIR.mkdir(parents=True, exist_ok=True)
 
 @router.get(
     "/all",
@@ -13,65 +21,57 @@ router = APIRouter(prefix="/profile")
     response_model_by_alias=False,
 )
 async def list_profiles():
-    return await get_all()
+    return await get_profiles()
 
 
 # @router.post("/create", response_model=ProfileModel, response_model_by_alias=False)
 # async def profile_create(profile: ProfileModel):
 #     return await create_profile(profile)
 
-@router.post("/generate")
-async def profile_generate(username: str, file: UploadFile = File(...)):
+@router.post("/get_webm")
+async def convert_and_upload(file: UploadFile = File(...)):
     try:
-        profile = generate_profile(username, file)
-        return profile
+        input_file_path = TEMP_DIR / file.filename
+        output_file_path = input_file_path.with_suffix(".mp3")
+
+        with open(input_file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        # ffmpeg command to convert webm to mp3
+        ffmpeg_path = "D:\\ffmpeg-7.0.1-essentials_build\\bin\\ffmpeg.exe"  # Update this path if ffmpeg is not in the system PATH
+        command = [ffmpeg_path, "-i", str(input_file_path), str(output_file_path)]
+        subprocess.run(command, check=True)
+
+        return FileResponse(output_file_path, media_type="audio/mpeg", filename=output_file_path.name)
+    except Exception as e:
+        return JSONResponse(content={"message": str(e)}, status_code=500)
+
+
+@router.post("/send_mp3")
+async def profile_create_singeaudio(username: str, file: UploadFile = File(...)):
+    try:
+        generate_profile = await refactoring_profile_with_mp3(username, file)
+        return generate_profile
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    
+@router.post("/send_text")
+async def profile_create_singletext(username: str, content: str):
+    try:
+        generate_profile = await refactoring_profile_with_text(username, content)
+        return generate_profile
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
 
 
-@router.post("/create", response_model=ProfileModel, response_model_by_alias=False)
-async def profile_create(profile: ProfileModel):
+@router.post("/save", response_model=ProfileModel, response_model_by_alias=False)
+async def profile_save(profile: ProfileModel):
+    print(profile)
     try:
-        result = await create(profile)
+        result = await create_profile_document(profile)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-@router.put("/update", response_model=ProfileModel, response_model_by_alias=False)
-async def profile_update(profile: ProfileModel):
-    try:
-        result = await update(profile)
-        if result is None:
-            raise HTTPException(status_code=404, detail="Profile not found")
-        return result
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@router.get("/get")
-async def resume_get(username: str):
-    try:
-        return await get(username)
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
-
-@router.delete("/delete")
-async def resume_delete(username: str):
-    try:
-        result_message = await delete(username)
-        if result_message == 'Profile successfully deleted.':
-            return {"detail": result_message}
-        else:
-            raise HTTPException(status_code=404, detail=result_message)
-    except Exception as e:
-        if "Database error" in str(e):
-            raise HTTPException(status_code=500, detail="Internal server error occurred")
-        else:
-            raise HTTPException(status_code=500, detail="Unexpected error occurred")
-
-
-
-
-
 
 @router.get("/create_test")
 async def profile_create_test(username: str):

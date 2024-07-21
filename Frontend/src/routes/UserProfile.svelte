@@ -1,15 +1,25 @@
 <script>
   import { navigate } from 'svelte-routing';
   import Navbar from '../components/Navbar.svelte';
+  import { user, userType } from '../lib/store';
 
 
-  let userId = '6695197b04cbd3e40f644197'; // 필요시 실제 유저 ID로 설정
+  let currentUser; // 필요시 실제 유저 ID로 설정
+  let currentUserType;
   let name = '';
   let birth = '';
   let gender = '';
   let skills = [];
   let careers = [];
   let alertMessage = '';
+
+  user.subscribe(value => {
+    currentUser = value;
+  });
+
+  userType.subscribe(value => {
+    currentUserType = value;
+  });
 
   // 기술 리스트에 추가 및 삭제
   function addSkill() {
@@ -33,37 +43,42 @@
       const timestamp = new Date().toISOString();
 
       const profileData = {
-          userId,
-          name,
-          birth,
+          username: currentUser,
+          name: name,
+          birth: birth,
           gender: parseInt(gender, 10),
-          skills,
-          careers,
+          skills: skills,
+          careers: careers,
           createdAt: timestamp,
           updatedAt: timestamp
       };
-
+      
       try {
-          const response = await fetch('http://localhost:8000/profile/create/', {
+          const response = await fetch('http://localhost:8000/profile/save', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json'
               },
               body: JSON.stringify(profileData)
           });
-          if (response.ok) {
-              alertMessage = '프로필이 성공적으로 작성되었습니다.';
-              // Clear form fields
-              name = '';
-              birth = '';
-              gender = '';
-              skills = [];
-              careers = [];
 
-              setTimeout(() => {
-                  alertMessage = '';
-                  navigate('/home');
-              }, 2000); // 2초 후에 홈 페이지로 이동
+          console.log(profileData);
+
+          if (response.ok) {
+            console.log('success');
+
+            alertMessage = '프로필이 성공적으로 작성되었습니다.';
+            // Clear form fields
+            name = '';
+            birth = '';
+            gender = '';
+            skills = [];
+            careers = [];
+
+            setTimeout(() => {
+                alertMessage = '';
+                navigate('/home');
+            }, 2000); // 2초 후에 홈 페이지로 이동
           } else {
               const result = await response.json();
               alertMessage = `작성 실패: ${result.detail}`;
@@ -72,16 +87,140 @@
           alertMessage = `작성 실패: 서버 오류 - ${error.message}`;
       }
   }
+
   function handleRadioChange(event) {
     gender = event.target.value;
     console.log("Selected gender:", gender);
+  }
+
+
+
+  // ===================전체 녹음=======================
+  let mp3Blob = null;
+  let mediaRecorder;
+  let recordedChunks = [];
+  let isTotalRecording = false;
+  let webm_record_name = '';
+  let mp3_record_name = '';
+
+
+  async function totalRecording() {
+    try {
+      recordedChunks = [];
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorder = new MediaRecorder(stream);
+
+      mediaRecorder.ondataavailable = event => {
+        if (event.data.size > 0) {
+          recordedChunks.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = () => {
+        const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+        convertToMP3(blob);
+        console.log("Recording stopped, audioBlob created");
+      };
+
+      mediaRecorder.start();
+      isTotalRecording = true;
+      console.log("Recording started");
+    } catch (err) {
+      console.error("Error accessing media devices.", err);
+    }
+  }
+
+  function stopTotalRecording() {
+    mediaRecorder.stop();
+    isTotalRecording = false;
+    console.log("Recording stopped");
+  }
+
+  function toggleTotalRecording() {
+    if (isTotalRecording) {
+      stopTotalRecording();
+    } else {
+      totalRecording();
+    }
+  }
+
+  async function convertToMP3(blob) {
+    const formData = new FormData();
+    webm_record_name = `${currentUser}_profile.webm`;
+    // formData.append('file', blob, 'recording.webm');
+    formData.append('file', blob, webm_record_name);
+
+    try {
+      const response = await fetch('http://localhost:8000/profile/get_webm', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (response.ok) {
+        mp3Blob = await response.blob();
+        console.log('파일 변환 성공');
+      } else {
+        throw new Error('파일 변환 실패');
+      }
+    } catch (err) {
+      console.error('Error converting file:', err);
+    }
+  }
+
+  async function uploadMP3() {
+    if (mp3Blob) {
+      const formData = new FormData();
+      mp3_record_name = `${currentUser}_profile.mp3`;
+      // formData.append('file', mp3Blob, 'recording.mp3');
+      formData.append('file', mp3Blob, mp3_record_name);
+      formData.append('username', currentUser);
+
+      try {
+        const response = await fetch('http://localhost:8000/profile/send_mp3', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          alert('파일 업로드 성공');
+        } else {
+          throw new Error('파일 업로드 실패');
+        }
+      } catch (err) {
+        console.error('Error uploading file:', err);
+        alert('파일 업로드 중 오류가 발생했습니다.');
+      }
+    } else {
+      alert('변환된 MP3 파일이 없습니다.');
+    }
+    navigate('/home');
   }
 
 </script>
 
 <Navbar />
 <main class="container">
-    <h1>나만의 프로필 작성</h1>
+    <h1>{currentUser}의 프로필 작성</h1>
+    <h4>(녹음 또는 직접 작성 해주세요.)</h4>
+    <h3>전체 녹음</h3>
+    <div>
+      <button type="button" on:click={toggleTotalRecording} class="record-button">
+        <i class="fas fa-microphone"></i> {#if isTotalRecording}녹음 중...{:else}녹음{/if}
+      </button>
+      <button type="button" on:click={uploadMP3} class="upload-button">
+        <i class="fas fa-upload"></i> 서버로 업로드
+      </button>
+    </div>
+    {#if mp3Blob}
+      <div>
+        <h3>녹음된 파일:</h3>
+        <audio controls>
+          <source src={URL.createObjectURL(mp3Blob)} type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    {/if}
+    <br><br>
     {#if alertMessage}
         <div class="alert">{alertMessage}</div>
     {/if}
@@ -96,9 +235,9 @@
         </label>
 
         <div class="radio-group">
-          <label>남자<input type="radio" name="gender" value="male" on:change={handleRadioChange} />
+          <label>남자<input type="radio" name="gender" value=1 on:change={handleRadioChange} />
           </label>
-          <label>여자<input type="radio" name="gender" value="female" on:change={handleRadioChange} />
+          <label>여자<input type="radio" name="gender" value=2 on:change={handleRadioChange} />
           </label>
         </div>
 

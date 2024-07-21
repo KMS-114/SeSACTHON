@@ -4,9 +4,6 @@ from pydantic import BaseModel, Field
 from datetime import datetime, timezone
 
 
-class Skill(BaseModel):
-    acquisition_date: str
-    qualification: str
 
 class Career(BaseModel):
     startDate: datetime
@@ -16,13 +13,13 @@ class Career(BaseModel):
 
 
 class ProfileModel(BaseModel):
-    username: str
+    username: str   # pk처럼 사용
 
     name: str
     birth: datetime
     gender: int
 
-    skills: list[Skill]
+    skills: list[str]
     careers: list[Career]
 
     createdAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))

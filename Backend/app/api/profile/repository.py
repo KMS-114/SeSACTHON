@@ -2,17 +2,14 @@ from datetime import datetime
 from typing import Optional
 
 from pymongo.collection import ReturnDocument
-from pymongo.errors import PyMongoError
 
 from ...database import mongodb
 from .schema import ProfileModel, ProfileCollection
-
 collection = mongodb.get_collection("profile")
-
 
 # TODO: Not Completed
 
-async def create(profile: ProfileModel):
+async def create_profile_document(profile: ProfileModel):
     try:
         existing_profile = await collection.find_one({"username": profile.username})
         if not existing_profile:
@@ -21,9 +18,9 @@ async def create(profile: ProfileModel):
             return ProfileModel(**created_profile)
         else:
             # profile.updatedAt = datetime.strptime(existing_profile.createdAt, "%Y-%m-%d")
-            new_profile = await collection.find_one_and_update(
-                {"userId": profile.username},
-                {"$set": profile.model_dump()},
+            new_profile = await collection.find_one_and_replace(
+                {"username": profile.username},
+                profile.model_dump(),
                 return_document=ReturnDocument.AFTER,
             )
             return ProfileModel(**new_profile)
@@ -32,47 +29,29 @@ async def create(profile: ProfileModel):
         print(f"Error creating profile: {e}")
         return None
 
-async def update(profile: ProfileModel):
-    try:
-        existing_profile = await collection.find_one({"username": profile.username})
-        if not existing_profile:
-            return None
-        else:
-            # profile.updatedAt = datetime.strptime(existing_profile.createdAt, "%Y-%m-%d")
-            new_profile = await collection.find_one_and_update(
-                {"userId": profile.username},
-                {"$set": profile.model_dump()},
-                return_document=ReturnDocument.AFTER,
-            )
-            return ProfileModel(**new_profile)
+async def create_profile(profile: ProfileModel):
+    existing_profile = await collection.find_one({"username": profile.username})
+    print(existing_profile)
 
-    except Exception as e:
-        print(f"Error updating profile: {e}")
-        return None
-
-async def get(username: str):
-    try:
-        profile_data = collection.find_one({"username": username})
-        if profile_data:
-            return ProfileModel(**profile_data)
-        else:
-            return None
-    except Exception as e:
-        print(f"Error find {username} profile: {e}")
+    if not existing_profile:
+        new_profile = await collection.insert_one(profile.model_dump())
+        created_profile = await collection.find_one({"_id": new_profile.inserted_id})
+        print(created_profile)
+        return created_profile
+    else:
+        new_profile = await collection.find_one_and_replace(
+            {"username": profile.username},
+            profile.model_dump(),
+            return_document=ReturnDocument.AFTER,
+        )
+        return new_profile
 
 
-async def get_all():
+async def get_profile(username: str) -> ProfileModel:
+    profile_data = collection.find_one({"username": username})
+    if profile_data:
+        return ProfileModel(**profile_data)
+
+async def get_profiles():
     list_profiles = await collection.find().to_list(10)
     return ProfileCollection(profiles=list_profiles)
-
-async def delete(username: str):
-    try:
-        delete_result = await collection.delete_one({"username": username})
-        if delete_result.deleted_count == 1:
-            return 'Profile successfully deleted.'
-        else:
-            return 'No profile found to delete.'
-    except PyMongoError as e:
-        raise RuntimeError("Database error occured")
-    except Exception as e:
-        raise RuntimeError("Unexpected error occured")

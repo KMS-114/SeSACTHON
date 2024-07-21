@@ -41,7 +41,6 @@ async def create_job_posting(job_posting: JobPostingModel) -> JobPostingModel:
 
     return created_job_posting
 
-
 async def find_all_job_postings() -> JobPostingCollection:
     collection = mongodb.get_collection("jobPosting")
     list_job_postings = await collection.find().to_list(length=10)
@@ -50,7 +49,7 @@ async def find_all_job_postings() -> JobPostingCollection:
 
 async def find_job_posting(job_posting_id: str) -> JobPostingModel:
     collection = mongodb.get_collection("jobPosting")
-    job_posting = await collection.find_one({"_id": job_posting_id})
+    job_posting = await collection.find_one({"_id": ObjectId(job_posting_id)})
     return JobPostingModel(**job_posting)
 
 
