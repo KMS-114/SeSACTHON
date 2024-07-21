@@ -4,13 +4,13 @@ from fastapi import UploadFile
 import os
 
 
-async def save_upload_file(username: str, audio: UploadFile, type: str):
+async def save_upload_file(username: str, file: UploadFile, type: str):
     save_path = f"../../data/{type}/{username}"
     os.makedirs(save_path, exist_ok=True)
 
-    file_path = os.path.join(save_path, audio.filename)
+    file_path = os.path.join(save_path, file.filename)
     with open(file_path, "wb") as file_object:
-        shutil.copyfileobj(audio.file, file_object)
+        shutil.copyfileobj(file.file, file_object)
     return file_path
 
 

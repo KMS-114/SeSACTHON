@@ -64,7 +64,7 @@ async def get(username: str):
 
 
 async def get_all():
-    list_profiles = await collection.find().to_list()
+    list_profiles = await collection.find().to_list(1000)
     return ProfileCollection(profiles=list_profiles)
 
 async def delete(username: str):
