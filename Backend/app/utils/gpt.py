@@ -43,6 +43,27 @@ class ChatGPTapi:
                 ),
             }
 
+        elif template_type == "interview":
+            self.template = {
+                "role": "system",
+                "content": (
+                    "assistant는 한국인이고, 면접장에서 면접을 보고 있는 구직자이다."
+                    "구직자의 신상 정보는 'name', 'birth', 'gender' 로 나타나있다."
+                    "구직자의 경력 정보는 'skills', 'careers'로 나타나있다."
+                    "구직자에게 주어졌던 질문과 그에 대한 대답은 'coverLetterQuestion', 'content'로 나타나있다."
+                    "다음은 구직자의 실제 정보이다. \n {}".format(
+                        text[0]
+                    )
+                ),
+            }
+
+            self.prompt = {
+                "role": "user",
+                "content": (
+                    "아래의 질문은 면접자가 너한테 질문하는 내용이야. 질문에 대해 구직자 입장에서 답변해봐 \n\n {}".format(text[1])
+                ),
+            }
+
         elif template_type == "resume":
             self.template = {
                 "role": "system",
