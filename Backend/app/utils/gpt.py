@@ -44,6 +44,10 @@ class ChatGPTapi:
             }
 
         elif template_type == "interview":
+            text = []
+            text.append(question)
+            text.append(answer)
+
             self.template = {
                 "role": "system",
                 "content": (

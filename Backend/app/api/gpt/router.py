@@ -42,7 +42,8 @@ def interview(user_info: str = Query(...), question: str = Query(...)):
     text = [user_info, question]
     print(text)
     
-    gpt.set_messages(template_type="interview", text=text)
+    gpt.set_messages(template_type="interview", question=user_info, answer=question)     
+
     profile_extract = gpt.gpt_request()
     # profile_dict = eval(profile_extract)
 
