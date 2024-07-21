@@ -24,8 +24,7 @@ class ChatGPTapi:
                     "'name'은 이름을 뽑고, 'birth'는 나이나 생년월일을 통해서 XXXX-XX-XX 형태로 알려주고 나이를 알려주면 나이를 기준으로 생년 월일을 뽑아줘"
                     "2024년 기준으로 26세는 1998년생이야 이 내용을 기반으로 생년월일을 추정해야해 오늘 날짜 기준으로 해줘. 오늘은 {} 야"
                     "나이는 만나이 기준으로 하는거야"
-                    "'gender'는 남성은 1 여성은 2로 알려줘. 추가적으로 'skills'는 자격증별로 'acquisition_date' 취득년도와 'qualification'취득자격증으로 만들고 "
-                    "리스트 형태로 만들어서 넣어줘"
+                    "'gender'는 남성은 1 여성은 2로 알려줘. 추가적으로 'skills'는 자격증 이름을 뽑아서 문자열 리스트 형태로 만들어서 넣어줘"
                     "'careers'는 경력사항으로 시작날짜 'startDate'와 종료날짜 'endDate'로 XXXX-XX-XX 형태, "
                     "'affiliation'은 소속된 회사를 뽑고 'summary'는 소속 회사에서 했던일 간략하게 요약한 내용을 넣어줘"
                     "'careers' key 내부엔 startDate, endDate, affiliation, summary가 표함되는거야 알겠지".format(
@@ -41,6 +40,27 @@ class ChatGPTapi:
                     "딱 파이선 딕셔너리 형태의 문자열로만 반환해줘 다른 말은 필요없어 \n\n {}".format(
                         answer
                     )
+                ),
+            }
+
+        elif template_type == "interview":
+            self.template = {
+                "role": "system",
+                "content": (
+                    "assistant는 한국인이고, 면접장에서 면접을 보고 있는 구직자이다."
+                    "구직자의 신상 정보는 'name', 'birth', 'gender' 로 나타나있다."
+                    "구직자의 경력 정보는 'skills', 'careers'로 나타나있다."
+                    "구직자에게 주어졌던 질문과 그에 대한 대답은 'coverLetterQuestion', 'content'로 나타나있다."
+                    "다음은 구직자의 실제 정보이다. \n {}".format(
+                        text[0]
+                    )
+                ),
+            }
+
+            self.prompt = {
+                "role": "user",
+                "content": (
+                    "아래의 질문은 면접자가 너한테 질문하는 내용이야. 질문에 대해 구직자 입장에서 답변해봐 \n\n {}".format(text[1])
                 ),
             }
 
