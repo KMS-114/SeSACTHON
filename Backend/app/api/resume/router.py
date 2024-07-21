@@ -25,7 +25,7 @@ async def resume_create(resume: ResumeModel):
 
     return result
 @router.post("/generate")
-async def resume_generate(username: str, question: str, file:UploadFile = File(...)):
+async def resume_generate(username: str, question: list[str], file: UploadFile = File(...)):
     try:
         generate_answer = generate_resume(username, question, file)
         return generate_answer

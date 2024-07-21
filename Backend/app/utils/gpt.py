@@ -14,7 +14,7 @@ class ChatGPTapi:
         self.prompt = ""
         self.messages = []
 
-    def set_messages(self, template_type: str, question: Optional[str], answer: str):
+    def set_messages(self, template_type: str, question: Optional[list], answer: str):
         if template_type in "profile":
             self.template = {
                 "role": "system",
@@ -69,7 +69,9 @@ class ChatGPTapi:
                 "role": "system",
                 "content": (
                     f"넌 한국인이야. 지금 너가 하는 일은 자소서를 잘 정리하고 만들어서 자소서를 작성해주는 역할을 할거야."
-                    f"너는 아래 주어진 글에서 {question}의 의도에 잘 맞게 답변을 생성해줘야해. "
+                    f"너는 아래 주어진 글에서 리스트로 저장된 {question}의 의도에 잘 맞게 답변을 생성해줘야해. "
+                    f"해당 리스트의 개별 item들에 대한 답변을 각각 만들어줘야해 다합쳐서 만드는게 아니라 각각 만들어줘야하는거야"
+                    f"각각 만들어서 결과는 리스트의 질문에 대한 순서에 맞게 리스트에 넣은 값으로 생성할거야"
                     f"누가봐도 합격할만하게 자소서를 정리, 만들어주는데 절대로 진짜 절대로 거짓말을 섞거나 글과 다른 내용을 작성하면 안돼"
                     f"거짓 내용은 절대 안되고 아래의 글 기반으로 만들어야해."
                 ),
@@ -77,9 +79,9 @@ class ChatGPTapi:
             self.prompt = {
                 "role": "user",
                 "content": (
-                    f"아래의 줄글에서 자소서 문항에 대한 답변을 만들어줄래? "
+                    f"아래의 줄글에서 자소서 문항들에 대한 답변을 개별적으로 만들어줄래? "
                     f"무조건 아래 자기소개 기반으로 답변을 만들어내야해 다른 답변 없이 "
-                    f"딱 문자열로만 반환해줘 다른 말은 필요없어 \n\n {answer}"
+                    f"딱 각 질문순서에 맞게 리스트에 답변도 순서대로 저장해서 반환해줘 꼭 리스트야 다른 말은 필요없어 \n\n {answer}"
                 ),
             }
     def gpt_request(self, history=None):

@@ -9,7 +9,7 @@ import urllib3
 import json
 import base64
 import time
-from google.cloud import speech
+# from google.cloud import speech
 
 from openai import OpenAI
 
@@ -42,7 +42,7 @@ class ETRIstt:
         )
         return response
 
-    def run_stt(self, audio_file_path="../data/recordingData/20240712_221523.wav"):
+    def run_stt(self, audio_file_path="../data/30c135b3-5164-460c-a275-e55e8df74eae.weba"):
         response = self.stt(audio_file_path=audio_file_path)
         response_data = response.data.decode("utf-8")
         response_parsed = json.loads(response_data)
@@ -53,10 +53,9 @@ class ETRIstt:
 class OpenAIstt:
     def __init__(self):
         # config
-        self.client = OpenAI()
-        self.client.api_key = ""
+        self.client = OpenAI(api_key="")
 
-    def run_stt(self, audio_file_path="../Data/recordingData/womanEng.wav"):
+    def run_stt(self, audio_file_path="../data/30c135b3-5164-460c-a275-e55e8df74eae.weba"):
         audiofile = open(audio_file_path, "rb")
         transcript = self.client.audio.transcriptions.create(
             model="whisper-1", file=audiofile, response_format="text"
@@ -67,37 +66,37 @@ class OpenAIstt:
         return result
 
 
-class Googlestt:
-    def __init__(self):
-        os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
-            "stt-to-gpt-to-tts-9c93e4bf4ea7.json"
-        )
-
-    def run_stt(self, audio_file_path="./data/inputAudioData/womanEng.wav"):
-        # instantiates a client
-        print(os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
-
-        client = speech.SpeechClient()
-
-        gcs_uri = "gs://cloud-samples-data/speech/brooklyn_bridge.raw"
-        audio = speech.RecognitionAudio(uri=gcs_uri)
-
-        config = speech.RecognitionConfig(
-            encodings=speech.RecognitionConfig.AudioEncoding.LINEAR16,
-            sample_rate_hertz=16000,
-            language_code="en-US",
-        )
-
-        # Detects speech in the audio file
-        response = client.recognize(config=config, audio=audio)
-
-        for result in response.results:
-            print("Transcript: {}".format(result.alternatives[0].transcript))
-
+# class Googlestt:
+#     def __init__(self):
+#         os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = (
+#             "stt-to-gpt-to-tts-9c93e4bf4ea7.json"
+#         )
+#
+#     def run_stt(self, audio_file_path="./data/inputAudioData/womanEng.wav"):
+#         # instantiates a client
+#         print(os.environ["GOOGLE_APPLICATION_CREDENTIALS"])
+#
+#         client = speech.SpeechClient()
+#
+#         gcs_uri = "gs://cloud-samples-data/speech/brooklyn_bridge.raw"
+#         audio = speech.RecognitionAudio(uri=gcs_uri)
+#
+#         config = speech.RecognitionConfig(
+#             encodings=speech.RecognitionConfig.AudioEncoding.LINEAR16,
+#             sample_rate_hertz=16000,
+#             language_code="en-US",
+#         )
+#
+#         # Detects speech in the audio file
+#         response = client.recognize(config=config, audio=audio)
+#
+#         for result in response.results:
+#             print("Transcript: {}".format(result.alternatives[0].transcript))
+#
 
 if __name__ == "__main__":
     etri_stt = ETRIstt()
     answer = etri_stt.run_stt(
-        audio_file_path="../data/recordingData/20240712_221900.wav"
+        audio_file_path="./data/app_669bff792ffd2cca659e62df.wav"
     )
     print(answer)
