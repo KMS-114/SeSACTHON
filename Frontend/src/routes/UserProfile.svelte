@@ -117,7 +117,7 @@
       };
 
       mediaRecorder.onstop = () => {
-        const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+        const blob = new Blob(recordedChunks, { type: 'audio/wav' });
         convertToMP3(blob);
         console.log("Recording stopped, audioBlob created");
       };
@@ -146,8 +146,10 @@
 
   async function convertToMP3(blob) {
     const formData = new FormData();
-    webm_record_name = `${currentUser}_profile.webm`;
-    // formData.append('file', blob, 'recording.webm');
+    webm_record_name = `${currentUser}.webm`;
+
+    formData.append('username', currentUser);
+    formData.append('type', 'profile');
     formData.append('file', blob, webm_record_name);
 
     try {
@@ -170,13 +172,13 @@
   async function uploadMP3() {
     if (mp3Blob) {
       const formData = new FormData();
-      mp3_record_name = `${currentUser}_profile.mp3`;
+      mp3_record_name = `${currentUser}.wav`;
       // formData.append('file', mp3Blob, 'recording.mp3');
-      formData.append('file', mp3Blob, mp3_record_name);
-      formData.append('username', currentUser);
 
+      formData.append('username', currentUser);
+      formData.append('file', mp3Blob, mp3_record_name);
       try {
-        const response = await fetch('http://localhost:8000/profile/send_mp3', {
+        const response = await fetch('http://localhost:8000/profile/generate', {
           method: 'POST',
           body: formData,
         });
@@ -195,6 +197,7 @@
     }
     navigate('/home');
   }
+
 
 </script>
 

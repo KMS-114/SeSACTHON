@@ -11,10 +11,11 @@
     import JobPost from './routes/jobpost/JobPost.svelte';
     import JobDetail from './routes/jobpost/JobDetail.svelte';
     import ApplyUserList from'./routes/jobpost/ApplyUserList.svelte';
-    import MyJobPostList from'./routes/jobpost/MyJobPostList.svelte'
+    import MyJobPostList from'./routes/jobpost/MyJobPostList.svelte';
 
-    import MyResume from'./routes/applicant/MyResume.svelte'
+    import MyResume from'./routes/applicant/MyResume.svelte';
     import ApplyJob from './routes/applicant/ApplyJob.svelte';
+    import ApplyJobProfile from './routes/applicant/ApplyJobProfile.svelte';
 
     import UserProfile from './routes/UserProfile.svelte';
 
@@ -70,6 +71,7 @@
 
         
         <Route path="/profile" component={UserProfile} />
+        <Route path="/applyjobprofile/:id" component={ApplyJobProfile} />
         <Route path="/applyjob/:id" component={ApplyJob} />
         <Route path="/myresume" component={MyResume} />
     {/if}

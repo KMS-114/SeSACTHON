@@ -97,6 +97,7 @@
       error = err.message;
     }
   }
+  
   function filterResumes(id) {
     filteredResumeListings = resumeListings.filter(resume => {
       const matchesUser = resume.jobPostingId === id;
@@ -105,8 +106,8 @@
   }
 
   function Interview() {
-      // console.log('post to apply Job ID:', id);
-      // navigate(`/applyjob/${id}`);
+      window.location.href = 'http://localhost:7860';
+
     }
 </script>
 

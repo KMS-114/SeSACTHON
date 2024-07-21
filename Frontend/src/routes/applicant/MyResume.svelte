@@ -72,6 +72,8 @@
       error = err.message;
     }
   }
+
+  
   function filterJobs(useid) {
     filteredJobListings = jobListings.filter(job => {
       const matchesUser = job.id === useid;
