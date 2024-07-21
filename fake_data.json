@@ -1,0 +1,113 @@
+{
+  "users":
+  [
+    {
+      "userGroup": 1,
+      "username": "geonsik-youn",
+      "password": "1",
+      "affiliation": "동국대학교",
+      "createdAt": "2024-07-15 18:59:32",
+      "updatedAt": "2024-07-15 18:59:32"
+    },
+    {
+      "userGroup": 1,
+      "username": "hojun-yang",
+      "password": "2",
+      "affiliation": "인하대학교",
+      "createdAt": "2024-07-15 19:01:27",
+      "updatedAt": "2024-07-15 19:01:27"
+    },
+    {
+      "userGroup": 2,
+      "username": "hanseong-ryu",
+      "password": "3",
+      "affiliation": "(주)현대오토에버",
+      "createdAt": "2024-07-15 19:00:15",
+      "updatedAt": "2024-07-15 19:00:15"
+    },
+    {
+      "userGroup": 2,
+      "username": "suhwa-jo",
+      "password": "4",
+      "affiliation": "(주)현대오토에버",
+      "createdAt": "2024-07-15 19:08:48",
+      "updatedAt": "2024-07-15 19:08:48"
+    }
+  ],
+  "job_postings": [
+    {
+      "userId": "6695199d04cbd3e40f64419a",
+      "title": "인공지능 학습 데이터 레이블링 작업자 채용",
+      "description": "인공지능 학습 데이터 레이블링 작업자 채용",
+      "qualificationsRequired": {
+        "ageMin": 19,
+        "ageMax": 60,
+        "gender": 2,
+        "customQualification": {
+          "학력": "무관",
+          "경력": "무관"
+        }
+      },
+      "coverLetterQuestions": [
+        {
+          "coverLetterQuestionId": 0,
+          "content": "지원자의 지원동기를 간략하게 적어주세요.",
+          "charLimit": 500
+        },
+        {
+          "coverLetterQuestionId": 1,
+          "content": "지원자의 컴퓨터 활용 업무 경험을 간략하게 적어주세요.",
+          "charLimit": 500
+        }
+      ],
+      "createdAt": "2024-07-15 19:20:34",
+      "updatedAt": "2024-07-15 19:20:34"
+    }
+  ],
+  "profiles": [
+    {
+      "userId": "6695197b04cbd3e40f644197",
+      "name": "윤건식",
+      "birth": "1997-03-17 00:00:00",
+      "gender": 1,
+      "skills": [
+        "파이썬 프로그래밍",
+        "고급 컴퓨터 활용 능력"
+      ],
+      "careers": [
+        {
+          "startDate": "2023-01-30 00:00:00",
+          "endDate": null,
+          "affiliation": "(주)현대오토에버",
+          "summary": "인공지능 기술개발"
+        },
+        {
+          "startDate": "2021-09-01 00:00:00",
+          "endDate": "2023-02-18 00:00:00",
+          "affiliation": "동국대학교 산업AI연구센터",
+          "summary": "R&D 산업 프로젝트 운영 및 연구 수행"
+        }
+      ],
+      "createdAt": "2024-07-15 19:35:57",
+      "updatedAt": "2024-07-15 19:35:57"
+    }
+  ],
+  "resumes": [
+    {
+      "userId": "6695197b04cbd3e40f644197",
+      "jobPostingId": "669519c704cbd3e40f64419b",
+      "coverLetters": [
+        {
+          "questionId": 0,
+          "answer": "돈을 벌고 싶어 지원했습니다."
+        },
+        {
+          "questionId": 1,
+          "answer": "커리어 내내 컴퓨터를 다루어 일을 했고, 전문가 수준의 컴퓨터 활용 능력이 있습니다."
+        }
+      ],
+      "createdAt": "2024-07-15 21:27:30",
+      "updatedAt": "2024-07-15 21:27:30"
+    }
+  ]
+}
