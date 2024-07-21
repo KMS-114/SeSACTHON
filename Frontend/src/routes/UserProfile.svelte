@@ -169,6 +169,7 @@
     }
   }
 
+  let audioProfile = null;
   async function uploadMP3() {
     if (mp3Blob) {
       const formData = new FormData();
@@ -185,6 +186,14 @@
 
         if (response.ok) {
           alert('파일 업로드 성공');
+          audioProfile = await response.json();
+          name = audioProfile.name;
+          birth = audioProfile.birth;
+          gender = audioProfile.gender;
+          skills = audioProfile.skills;
+          careers = audioProfile.careers;
+
+
         } else {
           throw new Error('파일 업로드 실패');
         }
@@ -195,7 +204,7 @@
     } else {
       alert('변환된 MP3 파일이 없습니다.');
     }
-    navigate('/home');
+    // navigate('/home');
   }
 
 

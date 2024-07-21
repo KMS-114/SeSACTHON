@@ -131,7 +131,6 @@
     return dateString.split('T')[0];
   }
 
-  
   function handleRadioChange(event) {
     userGender = event.target.value;
     console.log("Selected gender:", userGender);
@@ -244,15 +243,32 @@
     }
   }
 
+  let coverLetterQuestionList = [];
+  async function extractList(){
+    for (let index in coverLetterQuestions) {
+      coverLetterQuestionList.push(coverLetterQuestions[index].content);
+    }
+  }
+
+  let audioResume = null;
+
   async function uploadMP3() {
     if (mp3Blob) {
+      // extractList();
+      console.log(coverLetterQuestionList);
+
       const formData = new FormData();
       mp3_record_name = `${currentUser}_${jobid}.wav`;
       // formData.append('file', mp3Blob, 'recording.mp3');
 
       formData.append('username', currentUser);
       formData.append('file', mp3Blob, mp3_record_name);
-      formData.append('question', coverLetterQuestions);
+      for (let index in coverLetterQuestions) {
+        formData.append('question', coverLetterQuestions[index].content);
+      } 
+
+      console.log('form data', formData);
+
       try {
         const response = await fetch('http://localhost:8000/resume/generate', {
           method: 'POST',
@@ -261,6 +277,8 @@
 
         if (response.ok) {
           alert('파일 업로드 성공');
+          audioResume = await response.json();
+          console.log(audioResume);
         } else {
           throw new Error('파일 업로드 실패');
         }
@@ -271,7 +289,7 @@
     } else {
       alert('변환된 MP3 파일이 없습니다.');
     }
-    navigate('/home');
+    // navigate('/home');
   }
 
   // 제출
@@ -362,7 +380,7 @@ function updateAnswer(index, value) {
         <div>
           <label>질문 {index + 1}:</label>
           <label>{question.content}</label>
-          <input type="text" value={userCoverLetters[index]?.answer} on:input={(e) => updateAnswer(index, e.target.value)} required maxlength={question.charLimit} />
+          <input type="text" bind:value={userCoverLetters[index].answer} on:input={(e) => updateAnswer(index, e.target.value)} required maxlength={question.charLimit} />
         </div>
       {/each}
       <br>

@@ -130,7 +130,6 @@
   function formatDate(dateString) {
     return dateString.split('T')[0];
   }
-
   
   function handleRadioChange(event) {
     userGender = event.target.value;
@@ -188,8 +187,8 @@ function updateAnswer(index, value) {
   <h1>{job?.title} 이력서 작성</h1>
   <h4>(프로필 및 기본 인적사항 작성)</h4>
   <br><br>
-  
-  <form on:click={() => fillResume()}>
+
+  <form on:submit|preventDefault={fillResume}>
     <fieldset>
       <label>이름</label>
       <input type="text" bind:value={userName}/>

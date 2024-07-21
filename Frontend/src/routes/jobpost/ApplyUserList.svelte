@@ -2,11 +2,16 @@
   import { onMount } from 'svelte';
   import { navigate, Link } from 'svelte-routing';
   import Navbar from '../../components/Navbar.svelte';
-  import { userType } from '../../lib/store';
+  import { user, userType } from '../../lib/store';
 
   const timestamp = new Date().toISOString();
 
   let currentUserType;
+  let currentUser;
+
+  user.subscribe(value => {
+    currentUser = value;
+  });
 
   userType.subscribe(value => {
     currentUserType = value;
@@ -105,10 +110,35 @@
     });
   }
 
-  function Interview() {
-      window.location.href = 'http://localhost:7860';
 
+
+  async function handleInterviewPosting(applyuser) {
+
+    const InterviewData = {
+      username: applyuser
+    };
+    console.log('final data', InterviewData);
+
+    try {
+      const response = await fetch('http://localhost:8000/chat/set_username', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(InterviewData)
+      });
+
+      if (response.ok) {
+        window.location.href = 'http://localhost:7860'; // 데이터 전송 후 리다이렉트할 URL
+      } else {
+        console.error('Failed to submit data');
+      }
+    } catch (error) {
+      console.error('Error submitting data:', error);
     }
+  }
+
+
 </script>
 
 <Navbar />
@@ -139,7 +169,7 @@
         <li class="job-item">
           <h2>{resume.username}</h2>
           <div class="apply-btn-container">
-            <button class="apply-btn" on:click={() => Interview()}>가상 면접</button>
+            <button class="apply-btn" on:click={() => handleInterviewPosting(resume.username)}>가상 면접</button>
           </div>
         </li>
       {/each}
