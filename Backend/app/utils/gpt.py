@@ -48,14 +48,17 @@ class ChatGPTapi:
             text.append(question)
             text.append(answer)
 
+            print(f"text[0]: {text[0]}")
+            print(f"text[1]: {text[1]}")
+
             self.template = {
                 "role": "system",
                 "content": (
-                    "assistant는 한국인이고, 면접장에서 면접을 보고 있는 구직자이다."
-                    "구직자의 신상 정보는 'name', 'birth', 'gender' 로 나타나있다."
-                    "구직자의 경력 정보는 'skills', 'careers'로 나타나있다."
-                    "구직자에게 주어졌던 질문과 그에 대한 대답은 'coverLetterQuestion', 'content'로 나타나있다."
-                    "다음은 구직자의 실제 정보이다. \n {}".format(
+                    "너는 한국인이고, 면접장에서 면접을 보고 있는 구직자이다."
+                    "너의 신상 정보는 'name', 'birth', 'gender'로 나타나있다."
+                    "너의 경력 정보는 'skills', 'careers'로 나타나있다."
+                    "너에게 주어졌던 질문과 그에 대한 대답은 'coverLetterQuestion', 'content'로 나타나있다."
+                    "다음은 너의 실제 정보이다. \n {}".format(
                         text[0]
                     )
                 ),

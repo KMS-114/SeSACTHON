@@ -2,7 +2,8 @@ import gradio as gr
 import requests
 from typing import List, Dict
 
-USER_INFO = None
+USER_PROFILE_INFO = None
+USER_NAME = None
 
 # DB에서 이력서 정보를 가져오는 함수
 def get_resume_info():
@@ -18,30 +19,27 @@ def get_resume_info():
 
 # FastAPI와 통신하여 채팅 응답을 받는 함수
 def chat_with_api(question:str):
-    # TODO
-    # user_info 구현
-    user_info = USER_INFO
-    print(f"user_info: {user_info}, type(): {type(user_info)}")
+    username = requests.get("http://localhost:8000/chat/get")
+    username = username.json()
 
+    params={
+        'username': username        # svelte에서 넘긴 usrname 사용하려면 USER_NAME으로 대체
+    }
+    response = requests.get(f"http://localhost:8000/profile/get", params=params)
+    USER_PROFILE_INFO = response.json()
+    print(f"username({username})으로 가져온 USER_PROFILE_INFO: {USER_PROFILE_INFO}")
+
+    user_profile_info = USER_PROFILE_INFO
+    user_profile_info = str(user_profile_info)  # dict -> str로 변경.
+                                                # dict 자체를 쿼리 매개변수로 보내기 어려움. 다른 전처리 해야함
     params = {
-        'user_info': user_info,
+        'user_profile_info': user_profile_info,
         'question': question
     }
 
-    interviewer_anser = requests.get("http://localhost:8000/chat/interview", params=params)
-    print(f"inerview_answer.json(): {interviewer_anser.json()}")
+    interviewer_answer = requests.get("http://localhost:8000/chat/interview", params=params)
     
-    return interviewer_anser.json()
-    
-
-def get_user_info_by_user_name(username):
-    global USER_INFO    
-
-    # requests.get("http:localhost:8000/job_posting/detail/669bff912ffd2cca659e62e0")
-    response = requests.get(f"http://localhost:8000/user/get/{username}")
-    USER_INFO = response.json()
-    print(f"USER_INFO: {USER_INFO}")
-    return response.json()
+    return interviewer_answer.json()
 
 def get_user_profile() -> List[Dict]:
 
@@ -84,13 +82,13 @@ with iface:
     for btn in btn_list:
         btn.click(display_user_id, inputs=btn, outputs=resume_output)
 
-    gr.Interface(
-        fn=get_user_info_by_user_name,
-        inputs="text",
-        outputs="text",    
-        title="Number Processing Interface",
-        description="Enter a number and the server will process it."
-    )
+    # gr.Interface(
+    #     fn=get_user_info_by_user_name,
+    #     inputs="text",
+    #     outputs="text",    
+    #     title="Number Processing Interface",
+    #     description="Enter a number and the server will process it."
+    # )
 
     gr.Interface(
         fn=chat_with_api,
@@ -101,4 +99,5 @@ with iface:
     )
 
 if __name__ == "__main__":
+    # USER_NAME = requests.get("http://localhost:8000/chat/get_username")
     iface.launch()
