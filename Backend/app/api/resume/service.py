@@ -6,7 +6,7 @@ from ...utils.utils import save_upload_file
 
 stt = ETRIstt()
 
-async def generate_resume(username: str, question: list[str], file: UploadFile):
+async def generate_resume(username: str, question: List[str], file: UploadFile):
     gpt = ChatGPTapi()
 
     file_path = save_upload_file(username, file, "resume")

@@ -3,6 +3,7 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 from .schema import ResumeModel, ResumeCollection
 from .repository import get, create, get_all, delete, update
 from .service import generate_resume
+from typing import List
 
 router = APIRouter(prefix="/resume")
 
@@ -25,7 +26,7 @@ async def resume_create(resume: ResumeModel):
 
     return result
 @router.post("/generate")
-async def resume_generate(username: str, question: list[str], file: UploadFile = File(...)):
+async def resume_generate(username: str, question: List[str], file: UploadFile = File(...)):
     try:
         generate_answer = generate_resume(username, question, file)
         return generate_answer
