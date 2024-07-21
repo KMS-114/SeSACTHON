@@ -10,7 +10,6 @@ from .schema import ProfileModel, ProfileCollection
 collection = mongodb.get_collection("profile")
 
 
-# TODO: Not Completed
 
 async def create(profile: ProfileModel):
     try:
@@ -21,6 +20,7 @@ async def create(profile: ProfileModel):
             return ProfileModel(**created_profile)
         else:
             # profile.updatedAt = datetime.strptime(existing_profile.createdAt, "%Y-%m-%d")
+
             new_profile = await collection.find_one_and_update(
                 {"userId": profile.username},
                 {"$set": profile.model_dump()},
@@ -31,6 +31,7 @@ async def create(profile: ProfileModel):
     except Exception as e:
         print(f"Error creating profile: {e}")
         return None
+
 
 async def update(profile: ProfileModel):
     try:
@@ -62,7 +63,7 @@ async def get(username: str):
 
 
 async def get_all():
-    list_profiles = await collection.find().to_list(10)
+    list_profiles = await collection.find().to_list()
     return ProfileCollection(profiles=list_profiles)
 
 async def delete(username: str):

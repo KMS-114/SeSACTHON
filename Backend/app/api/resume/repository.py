@@ -58,7 +58,7 @@ async def get(username: str, jobPostingId: str):
 
 
 async def get_all() -> ResumeCollection:
-    list_resumes = await collection.find().to_list(length=10)
+    list_resumes = await collection.find().to_list()
     return ResumeCollection(resumes=list_resumes)
 
 async def delete(username: str, jobPostingId: str):
