@@ -9,6 +9,7 @@ from typing import List
 import subprocess
 import shutil
 from pathlib import Path
+from typing import List
 
 
 router = APIRouter(prefix="/resume")
@@ -94,7 +95,7 @@ async def resume_delete(username: str, jobPostingId: str):
 
 
 @router.post("/generate_test")
-async def resume_generate_test(username: str, question: list[str], answer: str):
+async def resume_generate_test(username: str, question: List[str], answer: str):
     try:
         generate_answer = await generate_resume_test(username=username, question=question, answer=answer)
         return generate_answer

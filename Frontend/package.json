@@ -19,6 +19,7 @@
     "@fortawesome/fontawesome-free": "^6.6.0",
     "bootstrap": "^5.3.3",
     "cors": "^2.8.5",
+    "extendable-media-recorder": "^9.2.9",
     "svelte-routing": "^2.13.0",
     "svelte-spa-router": "^4.0.1"
   }

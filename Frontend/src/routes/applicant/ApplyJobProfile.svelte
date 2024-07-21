@@ -130,7 +130,7 @@
   function formatDate(dateString) {
     return dateString.split('T')[0];
   }
-
+  
   function handleRadioChange(event) {
     userGender = event.target.value;
     console.log("Selected gender:", userGender);
@@ -167,174 +167,10 @@
   });
 
 
-
-
-  // ===================전체 녹음=======================
-  let mp3Blob = null;
-  let mediaRecorder;
-  let recordedChunks = [];
-  let isTotalRecording = false;
-  let webm_record_name = '';
-  let mp3_record_name = '';
-
-
-  async function totalRecording() {
-    try {
-      recordedChunks = [];
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      mediaRecorder = new MediaRecorder(stream);
-
-      mediaRecorder.ondataavailable = event => {
-        if (event.data.size > 0) {
-          recordedChunks.push(event.data);
-        }
-      };
-
-      mediaRecorder.onstop = () => {
-        const blob = new Blob(recordedChunks, { type: 'audio/wav' });
-        convertToMP3(blob);
-        console.log("Recording stopped, audioBlob created");
-      };
-
-      mediaRecorder.start();
-      isTotalRecording = true;
-      console.log("Recording started");
-    } catch (err) {
-      console.error("Error accessing media devices.", err);
-    }
+  function fillResume() {
+    console.log('post to apply Job ID:', jobid);
+    navigate(`/applyjob/${jobid}`);
   }
-
-  function stopTotalRecording() {
-    mediaRecorder.stop();
-    isTotalRecording = false;
-    console.log("Recording stopped");
-  }
-
-  function toggleTotalRecording() {
-    if (isTotalRecording) {
-      stopTotalRecording();
-    } else {
-      totalRecording();
-    }
-  }
-
-  async function convertToMP3(blob) {
-    const formData = new FormData();
-    webm_record_name = `${currentUser}_${jobid}.webm`;
-
-    formData.append('username', currentUser);
-    formData.append('type', 'resume');
-    formData.append('file', blob, webm_record_name);
-
-    try {
-      const response = await fetch('http://localhost:8000/resume/get_webm', {
-        method: 'POST',
-        body: formData,
-      });
-
-      if (response.ok) {
-        mp3Blob = await response.blob();
-        console.log('파일 변환 성공');
-      } else {
-        throw new Error('파일 변환 실패');
-      }
-    } catch (err) {
-      console.error('Error converting file:', err);
-    }
-  }
-
-  let coverLetterQuestionList = [];
-  async function extractList(){
-    for (let index in coverLetterQuestions) {
-      coverLetterQuestionList.push(coverLetterQuestions[index].content);
-    }
-  }
-
-  let audioResume = null;
-
-  async function uploadMP3() {
-    if (mp3Blob) {
-      // extractList();
-      console.log(coverLetterQuestionList);
-
-      const formData = new FormData();
-      mp3_record_name = `${currentUser}_${jobid}.wav`;
-      // formData.append('file', mp3Blob, 'recording.mp3');
-
-      formData.append('username', currentUser);
-      formData.append('file', mp3Blob, mp3_record_name);
-      for (let index in coverLetterQuestions) {
-        formData.append('question', coverLetterQuestions[index].content);
-      } 
-
-      console.log('form data', formData);
-
-      try {
-        const response = await fetch('http://localhost:8000/resume/generate', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (response.ok) {
-          alert('파일 업로드 성공');
-          audioResume = await response.json();
-          console.log(audioResume);
-        } else {
-          throw new Error('파일 업로드 실패');
-        }
-      } catch (err) {
-        console.error('Error uploading file:', err);
-        alert('파일 업로드 중 오류가 발생했습니다.');
-      }
-    } else {
-      alert('변환된 MP3 파일이 없습니다.');
-    }
-    // navigate('/home');
-  }
-
-  // 제출
-  async function handleReumseSubmit() {
-
-    const timestamp = new Date().toISOString();
-    console.log('start submit', coverLetterQuestions);
-    const resumeSubmitData = {
-      username: currentUser,
-      jobPostingId: jobid,
-      coverLetters: userCoverLetters,
-      createdAt: timestamp,
-      updatedAt: timestamp
-    };
-    // console.log("userID", currentUser);
-    // console.log("jobid", jobid);
-    // console.log("userCoverLetters", userCoverLetters);
-    // console.log("Sucess", resumeSubmitData);
-    initializeUserAnswers();
-    try {
-      const response = await fetch('http://localhost:8000/resume/create/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(resumeSubmitData)
-      });
-
-      if (response.ok) {
-        alertMessage = '이력서가 성공적으로 제출되었습니다.';
-        // Clear form fields
-        userCoverLetters = [];
-        
-        setTimeout(() => {
-          alertMessage = '';
-          navigate('/home'); // 변경된 경로 설정
-        }, 2000); // 2초 후에 채용 공고 리스트 페이지로 이동
-      } else {
-        const result = await response.json();
-        alertMessage = `작성 실패: ${result.detail}`;
-      }
-    } catch (error) {
-      alertMessage = `작성 실패: 서버 오류 - ${error.message}`;
-  }
-}
 
 function updateAnswer(index, value) {
     userCoverLetters = userCoverLetters.map((item, i) =>
@@ -348,45 +184,69 @@ function updateAnswer(index, value) {
 
 <main class="container">
   <br><br><br><br><br><br>
-  <h1>{job?.title}의 이력서 작성</h1>
-  <h4>(녹음 또는 직접 작성 해주세요.)</h4>
+  <h1>{job?.title} 이력서 작성</h1>
+  <h4>(프로필 및 기본 인적사항 작성)</h4>
   <br><br>
-  <h3>전체 녹음</h3>
-  <div>
-    <button type="button" on:click={toggleTotalRecording} class="record-button">
-      <i class="fas fa-microphone"></i> {#if isTotalRecording}녹음 중...{:else}녹음{/if}
-    </button>
-    <button type="button" on:click={uploadMP3} class="upload-button">
-      <i class="fas fa-upload"></i> 서버로 업로드
-    </button>
-  </div>
 
-  {#if mp3Blob}
-    <div>
-      <h3>녹음된 파일:</h3>
-      <audio controls>
-        <source src={URL.createObjectURL(mp3Blob)} type="audio/mpeg">
-        Your browser does not support the audio element.
-      </audio>
-    </div>
-  {/if}
-  <br><br>
-  
-  <form on:submit|preventDefault={handleReumseSubmit}>
+  <form on:submit|preventDefault={fillResume}>
     <fieldset>
-      <legend>자기 소개서</legend>
-      {#each coverLetterQuestions as question, index}
+      <label>이름</label>
+      <input type="text" bind:value={userName}/>
+
+      <label>
+        생년월일:
+        <input type="date" bind:value={userBirth} />
+      </label>
+
+      <div class="radio-group">
+        <label>남자<input type="radio" name="userGender" value=1 bind:group={userGender} on:change={handleRadioChange} />
+        </label>
+        <label>여자<input type="radio" name="userGender" value=2 bind:group={userGender} on:change={handleRadioChange} />
+        </label>
+      </div>
+
+      <label>학력</label>
+      <input type="text" bind:value={userProp1} />
+      <label>자격증</label>
+      <input type="text" bind:value={userProp2} />
+      <!-- <label>경력</label>
+      <input type="text" bind:value={userProp3} /> -->
+    </fieldset>
+
+    <fieldset>
+      <legend>기술</legend>
+      {#each userSkills as skill, index}
+        <label> 기술 {index + 1}:</label>
+          <br>
+          <div>
+              <input type="text" bind:value={userSkills[index]} placeholder="프로그래밍" required />
+          </div>
+      {/each}
+      <br>
+    </fieldset>
+  
+    <fieldset>
+      <legend>경력 사항</legend>
+      {#each userCareers as career, index}
         <br>
         <div>
-          <label>질문 {index + 1}:</label>
-          <label>{question.content}</label>
-          <input type="text" bind:value={userCoverLetters[index].answer} on:input={(e) => updateAnswer(index, e.target.value)} required maxlength={question.charLimit} />
+            <label>시작 날짜:</label>
+            <input type="date" bind:value={career.startDate} required />
+
+            <label>종료 날짜:</label>
+            <input type="date" bind:value={career.endDate} />
+
+            <label>소속:</label>
+            <input type="text" bind:value={career.affiliation} required />
+
+            <label>요약:</label>
+            <textarea bind:value={career.summary} required></textarea>
         </div>
       {/each}
       <br>
     </fieldset>
     
-    <button type="submit">작성</button>
+    <button type="submit">다음</button>
   </form>
 
 </main>

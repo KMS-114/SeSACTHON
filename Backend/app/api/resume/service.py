@@ -11,10 +11,14 @@ async def generate_resume(username: str, question: List[str], file: UploadFile):
 
     file_path = await save_upload_file(username=username, file=file, type="resume")
     user_answer = stt.run_stt(file_path=file_path)
+    
 
     gpt.set_messages(template_type="resume", question=question, answer=user_answer)
     resume_refactor = gpt.gpt_request()
+
     resume_list = eval(resume_refactor)
+    
+    
     return resume_list
 
 async def generate_resume_test(username: str, question: List[str], answer: str):

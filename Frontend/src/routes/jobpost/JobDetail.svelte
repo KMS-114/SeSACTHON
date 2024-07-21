@@ -73,7 +73,7 @@
 
   function applyJob() {
       console.log('post to apply Job ID:', id);
-      navigate(`/applyjob/${id}`);
+      navigate(`/applyjobprofile/${id}`);
     }
 </script>
 
