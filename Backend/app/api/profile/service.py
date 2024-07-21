@@ -17,26 +17,26 @@ stt = ETRIstt()
 async def generate_profile(username: str, file: UploadFile):
     gpt = ChatGPTapi()
 
-    file_path = save_upload_file(username, file, type="profile")
-    user_answer = stt.run_stt(file_path)
+    file_path = await save_upload_file(username=username, file=file, type="profile")
+    user_answer = stt.run_stt(file_path=file_path)
 
     gpt.set_messages(template_type="profile", answer=user_answer)
     profile_extract = gpt.gpt_request()
     profile_dict = eval(profile_extract)
 
-    profile_save = await convert_to_datetime(profile_dict)
+    profile_save = await convert_to_datetime(obj=profile_dict)
     profile_save['username'] = username
 
     profile = ProfileModel(**profile_save)
     if profile is not None:
-        await delete_upload_file(str(file_path))
+        await delete_upload_file(file_path=str(file_path))
     return profile
 
 
 async def convert_to_datetime(obj):
     if isinstance(obj, list):
         for career in obj:
-            await convert_to_datetime(career)
+            await convert_to_datetime(obj=career)
     elif isinstance(obj, dict):
         for key, value in obj.items():
             if key == 'startDate' or key == 'endDate' or key == "birth":

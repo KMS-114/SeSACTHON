@@ -42,8 +42,8 @@ class ETRIstt:
         )
         return response
 
-    def run_stt(self, audio_file_path="../data/30c135b3-5164-460c-a275-e55e8df74eae.weba"):
-        response = self.stt(audio_file_path=audio_file_path)
+    def run_stt(self, file_path="../data/30c135b3-5164-460c-a275-e55e8df74eae.weba"):
+        response = self.stt(audio_file_path=file_path)
         response_data = response.data.decode("utf-8")
         response_parsed = json.loads(response_data)
         answer = response_parsed.get("return_object", {}).get("recognized", "")
@@ -97,6 +97,6 @@ class OpenAIstt:
 if __name__ == "__main__":
     etri_stt = ETRIstt()
     answer = etri_stt.run_stt(
-        audio_file_path="./data/app_669bff792ffd2cca659e62df.wav"
+        file_path="./data/app_669bff792ffd2cca659e62df.wav"
     )
     print(answer)
