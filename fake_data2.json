@@ -1,0 +1,76 @@
+{
+  "users": [
+    {
+      "_id": "string",
+      "userGroup": 0,
+      "username": "string", // p.k로 사용
+      "password": "string",
+      "affiliation": "string",
+      "createdAt": "2024-07-21T10:58:49.061Z",
+      "updatedAt": "2024-07-21T10:58:49.061Z"
+    }
+  ],
+  "jobPostings": [
+    {
+      "_id": "string",
+      "username": "string",
+      "title": "string",
+      "description": "string",
+      "qualificationsRequired": {
+        "ageMin": 0,
+        "ageMax": 0,
+        "gender": 0,
+        "customQualification": {
+          "additionalProp1": "string",
+          "additionalProp2": "string",
+          "additionalProp3": "string"
+        }
+      },
+      "coverLetterQuestions": [
+        {
+          "coverLetterQuestionId": 0,
+          "content": "string",
+          "charLimit": 0
+        }
+      ],
+      "createdAt": "2024-07-21T10:58:26.917Z",
+      "updatedAt": "2024-07-21T10:58:26.917Z"
+    }
+  ],
+  "profiles": [
+    {
+      "username": "string",
+      "name": "string",
+      "birth": "2024-07-21T10:57:52.712Z",
+      "gender": 0,
+      "skills": [
+        "string"
+      ],
+      "careers": [
+        {
+          "startDate": "2024-07-21T10:57:52.712Z",
+          "endDate": "2024-07-21T10:57:52.712Z",
+          "affiliation": "string",
+          "summary": "string"
+        }
+      ],
+      "createdAt": "2024-07-21T10:57:52.712Z",
+      "updatedAt": "2024-07-21T10:57:52.712Z"
+    }
+  ],
+  "resumes": [
+    {
+      "_id": "string",
+      "username": "string",
+      "jobPostingId": "string",
+      "coverLetters": [
+        {
+          "questionId": 0,
+          "answer": "string"
+        }
+      ],
+      "createdAt": "2024-07-21T10:59:12.409Z",
+      "updatedAt": "2024-07-21T10:59:12.409Z"
+    }
+  ]
+}
