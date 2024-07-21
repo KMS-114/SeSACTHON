@@ -49,7 +49,6 @@
   // =============== 공고 정보 ===============================
   let jobid = null;
   let job = null;
-  let testid = '669bf2972ffd2cca659e62dd';
   let testjob;
 
   let jobListings = [];
