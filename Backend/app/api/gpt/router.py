@@ -1,5 +1,4 @@
 from fastapi import APIRouter, Request, Query
-from ...chatgpt import ChatgptAPI
 from ...utils.gpt import ChatGPTapi
 
 router = APIRouter(prefix="/chat")
