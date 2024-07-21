@@ -12,6 +12,7 @@
   
     async function signup(event) {
       event.preventDefault();
+      const timestamp = new Date().toISOString();
 
       // integer로 변경
       const userGroupInt = parseInt(usergroup, 10);
@@ -23,11 +24,12 @@
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          _id: userid,
-          userGroup: usergroup,
           username: username,
+          userGroup: usergroup,
           password: password,
-          affiliation: affiliation
+          affiliation: affiliation,
+          createdAt:  timestamp,
+          updatedAt: timestamp
         }),
 
       });
@@ -159,12 +161,7 @@
         <div class="input-wrapper">
           <label for="First-Name-4" class="input-label">아이디</label>
           <input class="input" maxlength="256"
-                  type="text" bind:value={userid} required />
-        </div>
-        <div class="input-wrapper">
-          <label for="Last-Name-4" class="input-label">이름</label>
-          <input class="input" maxlength="256" placeholder="e.g. Hong Gil Dong"
-                 type="text"  bind:value={username} required />
+                  type="text" bind:value={username} required />
         </div>
         <div class="input-wrapper">
           <label for="Password-4" class="input-label">비밀번호</label>

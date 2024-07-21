@@ -1,36 +1,38 @@
 <script>
   import { navigate } from 'svelte-routing';
   import { writable } from 'svelte/store';
-  import { isLoggedIn, user, userType } from '../lib/store';
+  import { isLoggedIn, user, userType } from '../../lib/store';
 
-  let userid = '';
+  let username = '';
   let password = '';
+  let usergroup;
+  let currentUser;
 
   async function login(event) {
-    event.preventDefault();
-    const response = await fetch('http://localhost:8000/user/get/${userid}', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        '_id': userid,
-        'password': password,
-      }),
-    });
-
+    event.preventDefault(username);
+    const response = await fetch(`http://localhost:8000/user/get/${username}`);
+      if (!response.ok) {
+        throw new Error('로그인에 실패했습니다');
+      }
     if (response.ok) {
       const data = await response.json();
+      usergroup = data.userGroup;
+      currentUser = data.username;
+      console.log('login', data);
 
       isLoggedIn.set(true);
-      user.set({ userid });
-      userType.set(userGroup);
+      user.set(currentUser);
+      userType.set(usergroup);
       localStorage.setItem('token', data.access_token);
 
+
+      console.log('current ', currentUser);
+      console.log('setting ', user);
+
       alert('Login successful');
-      if (userGroup === '1') {
+      if (usergroup === 1) {
         navigate('/home', { replace: true });
-      } else if (userGroup === '2') {
+      } else if (usergroup === 2) {
         navigate('/home', { replace: true });
       } else {
         navigate('/', { replace: true });
@@ -149,12 +151,12 @@
             class="form-container" on:submit={login}>
         <h1 class="h1-small">Login</h1>
         <div class="input-wrapper">
-          <label for="Password-4" class="input-label">아이디</label>
-          <input class="input" maxlength="256" 
-                 type="text" bind:value={userid} required />
+          <label class="input-label">아이디</label>
+          <input class="input" maxlength="256"
+                 type="text" bind:value={username} required />
         </div>
         <div class="input-wrapper">
-          <label for="Password-4" class="input-label">비밀번호</label>
+          <label class="input-label">비밀번호</label>
           <input class="input" maxlength="256"
                  type="password" bind:value={password} required />
         </div>

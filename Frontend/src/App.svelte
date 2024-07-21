@@ -2,14 +2,22 @@
     import { Router, Route, navigate, Link } from 'svelte-routing';
     import Main from './routes/Main.svelte';
     import Home from './routes/Home.svelte';
-    import Login from './routes/Login.svelte';
-    import Signup from './routes/Signup.svelte';
+
+    import Login from './routes/user/Login.svelte';
+    import Signup from './routes/user/Signup.svelte';
+    import myInfo from './routes/user/myInfo.svelte';
+
     import JobPostList from './routes/jobpost/JobPostList.svelte';
     import JobPost from './routes/jobpost/JobPost.svelte';
     import JobDetail from './routes/jobpost/JobDetail.svelte';
-    import UserProfile from './routes/UserProfile.svelte';
-    import ApplyJob from './routes/jobpost/ApplyJob.svelte';
+    import ApplyUserList from'./routes/jobpost/ApplyUserList.svelte';
     import MyJobPostList from'./routes/jobpost/MyJobPostList.svelte'
+
+    import MyResume from'./routes/applicant/MyResume.svelte'
+    import ApplyJob from './routes/applicant/ApplyJob.svelte';
+
+    import UserProfile from './routes/UserProfile.svelte';
+
     import { isLoggedIn, userType } from './lib/store';
 
 
@@ -19,7 +27,7 @@
     }
 
     let loggedIn = true;
-    let currentUserType = "2";
+    let currentUserType;
 
     // 로그인 상태 구독
     isLoggedIn.subscribe(value => {
@@ -49,19 +57,21 @@
     <Route path="/" component={Main} />
     <Route path="/login" component={Login} />
     <Route path="/signup" component={Signup} />
+    <Route path="/myInfo" component={myInfo} />
+
     {#if loggedIn}
         <Route path="/home" component={Home} />
+
         <Route path="/jobpostlist" component={JobPostList} />
         <Route path="/jobdetail/:id" component={JobDetail} />
-
         <Route path="/myjobpostlist" component={MyJobPostList} />
-        <!-- {#if currentUserType === "1"} -->
-            <Route path="/jobpost" component={JobPost} />
-        <!-- {/if} -->
-        <!-- {#if currentUserType === "2"} -->
-            <Route path="/profile" component={UserProfile} />
-        <!-- {/if} -->
-        <!-- <Route path="/applyjob/:id" component={ApplyJob} /> -->
+        <Route path="/jobpost" component={JobPost} />
+        <Route path="/applyuserlist/:id" component={ApplyUserList} />
+
+        
+        <Route path="/profile" component={UserProfile} />
+        <Route path="/applyjob/:id" component={ApplyJob} />
+        <Route path="/myresume" component={MyResume} />
     {/if}
 
 </Router>

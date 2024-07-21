@@ -2,8 +2,9 @@ from fastapi import APIRouter, UploadFile, File, HTTPException
 from fastapi.responses import JSONResponse
 from typing import Optional
 from .schema import ProfileCollection, ProfileModel
-from .repository import get_profiles, create_profile_document
-from .service import refactoring_profile_with_mp3, refactoring_profile_with_text, refactoring_profile_test, create_profile_test
+
+from .repository import get_all, create, get, delete, update
+from .service import generate_profile, refactoring_profile_test, create_profile_test
 
 router = APIRouter(prefix="/profile")
 
@@ -14,38 +15,65 @@ router = APIRouter(prefix="/profile")
     response_model_by_alias=False,
 )
 async def list_profiles():
-    return await get_profiles()
+    return await get_all()
 
 
 # @router.post("/create", response_model=ProfileModel, response_model_by_alias=False)
 # async def profile_create(profile: ProfileModel):
 #     return await create_profile(profile)
 
-@router.post("/send_mp3")
-async def profile_create_singeaudio(username: str, file: UploadFile = File(...)):
+@router.post("/generate")
+async def profile_generate(username: str, file: UploadFile = File(...)):
     try:
-        generate_profile = await refactoring_profile_with_mp3(username, file)
-        return generate_profile
-    except Exception as e:
-        raise HTTPException(status_code=404, detail=str(e))
-    
-@router.post("/send_text")
-async def profile_create_singletext(username: str, content: str):
-    try:
-        generate_profile = await refactoring_profile_with_text(username, content)
-        return generate_profile
+        profile = generate_profile(username, file)
+        return profile
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
 
 
-@router.post("/save", response_model=ProfileModel, response_model_by_alias=False)
-async def profile_save(profile: ProfileModel):
-    print(profile)
+@router.post("/create", response_model=ProfileModel, response_model_by_alias=False)
+async def profile_create(profile: ProfileModel):
     try:
-        result = await create_profile_document(profile)
+        result = await create(profile)
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+@router.put("/update", response_model=ProfileModel, response_model_by_alias=False)
+async def profile_update(profile: ProfileModel):
+    try:
+        result = await update(profile)
+        if result is None:
+            raise HTTPException(status_code=404, detail="Profile not found")
+        return result
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.get("/get")
+async def resume_get(username: str):
+    try:
+        return await get(username)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@router.delete("/delete")
+async def resume_delete(username: str):
+    try:
+        result_message = await delete(username)
+        if result_message == 'Profile successfully deleted.':
+            return {"detail": result_message}
+        else:
+            raise HTTPException(status_code=404, detail=result_message)
+    except Exception as e:
+        if "Database error" in str(e):
+            raise HTTPException(status_code=500, detail="Internal server error occurred")
+        else:
+            raise HTTPException(status_code=500, detail="Unexpected error occurred")
+
+
+
+
+
 
 @router.get("/create_test")
 async def profile_create_test(username: str):

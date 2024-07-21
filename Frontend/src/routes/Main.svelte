@@ -30,10 +30,13 @@ html, body {
 .description, .link {
   font-family: 'Amatic SC', cursive;
   text-align: center;
+  font-size: 150px;
 }
 
-.description {
-  font-size: 35px;
+.subdescription {
+  font-family: 'Amatic SC', cursive;
+  text-align: center;
+  font-size: 40px;
 }
 
 .btn {
@@ -85,7 +88,8 @@ html, body {
 </style>
 <body>
 <div class="container">
-  <p class="description">채용 공고 홈페이지입니다.</p>
+  <p class="description">CHIUP</p>
+  <p class="subdescription">사회적 약자를 위한 채용 플랫폼</p>
   <div class="button_container">
     <button class="btn" on:click={() => navigate('/login')}><span>Login</span></button>
     <button class="btn" on:click={() => navigate('/signup')}><span>Signup</span></button>
